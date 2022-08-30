@@ -6,12 +6,16 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "sass": "sass --watch src/styles/main.scss:src/styles/main.css"
   },
   "dependencies": {
+    "bootstrap": "^5.2.0",
     "next": "12.2.5",
     "react": "18.2.0",
-    "react-dom": "18.2.0"
+    "react-bootstrap": "^2.5.0",
+    "react-dom": "18.2.0",
+    "sass": "^1.54.6"
   },
   "devDependencies": {
     "eslint": "8.23.0",
