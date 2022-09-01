@@ -24,7 +24,7 @@ export default function Header() {
       <Form className="d-flex align-items-center">
         <Dropdown>
           <Dropdown.Toggle variant="success" id="dropdown-basic">
-            Dropdown Button
+            Ofac - Merchant
           </Dropdown.Toggle>
 
           <Dropdown.Menu>
