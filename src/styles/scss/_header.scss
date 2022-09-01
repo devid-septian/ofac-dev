@@ -1,1 +1,12 @@
-@use "../custom" as *;
+.navbar {
+  h1 {
+    margin-bottom: 0;
+    font-size: 30px;
+    color: #ffffff;
+  }
+  .btn {
+    border-radius: 0;
+    color: #ffffff;
+    margin-right: 10px;
+  }
+}
