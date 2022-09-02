@@ -4,8 +4,9 @@
   height: 100%;
   position: fixed;
   top: 0;
-  left: 0;
+  left: -364px;
   background-color: #E4E1E1;
+  transition: all 400ms linear;
   .side-head {
     background-color: #1C6B77;
     height: 108px;
