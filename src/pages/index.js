@@ -6,12 +6,15 @@ import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
 import Router from 'next/router'
 import { useState } from 'react'
+import { useDispatch } from 'react-redux'
+import { setUser } from '../redux/services/userSlice'
 
 export default function Home() {
     const [userName, setUserName] = useState('')
     const [password, setPassword] = useState('')
     const MySwal = withReactContent(Swal)
     const [addNewPost, { isLoading }] = useAddNewPostMutation()
+    const dispatch = useDispatch()
     const submitHandler = async (event) => {
         event.preventDefault()
         try {
@@ -20,7 +23,9 @@ export default function Home() {
                 user_password: password,
             }
             const data = await addNewPost(requestBody)
-            if (data) {
+
+            if (data.data.success) {
+                dispatch(setUser(data.data.data))
                 MySwal.fire({
                     icon: 'success',
                     title: 'Success Login',

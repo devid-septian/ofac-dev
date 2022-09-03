@@ -1,8 +1,7 @@
-import { createSlice, Draft, PayloadAction } from '@reduxjs/toolkit'
+import { createSlice } from '@reduxjs/toolkit'
 
 const initialState = {
-    name: 'Sulhadin',
-    email: 'sulhadin@gmail.com',
+    value: null,
 }
 
 /**
@@ -15,19 +14,16 @@ export const userSlice = createSlice({
     name: 'user',
     initialState,
     reducers: {
-        setName: (state, action) => {
-            state.name = action.payload
-        },
-        setEmail: (state, action) => {
-            state.email = action.payload
+        setUser: (state, action) => {
+            state.value = action.payload
         },
     },
 })
 
 // A small helper of user state for `useSelector` function.
-export const getUserState = (state) => state.user
+export const getUserState = (state) => state.user.value
 
 // Exports all actions
-export const { setName, setEmail } = userSlice.actions
+export const { setUser } = userSlice.actions
 
 export default userSlice.reducer
