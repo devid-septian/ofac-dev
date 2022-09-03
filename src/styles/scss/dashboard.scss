@@ -3,8 +3,12 @@
   height: 100vh;
   background-color: #E4E1E1;
   padding-top: 108px;
+  transition: all 400ms linear;
   &.show_menu {
     padding-left: 364px;
+    .side-menu {
+      left: 0 !important;
+    }
   }
 }
 .breadcrumb {
