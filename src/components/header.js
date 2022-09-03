@@ -6,7 +6,7 @@ import Nav from 'react-bootstrap/Nav'
 import Navbar from 'react-bootstrap/Navbar'
 import Dropdown from 'react-bootstrap/Dropdown'
 import { useDispatch } from 'react-redux'
-import { setUser } from '../../redux/services/userSlice'
+import { setUser } from '../redux/services/userSlice'
 import Router from 'next/router'
 
 export default function Header({ toggleClass }) {

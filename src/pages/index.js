@@ -8,6 +8,8 @@ import Router from 'next/router'
 import { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { setUser } from '../redux/services/userSlice'
+import { useSelector } from 'react-redux'
+import { getUserState } from '../redux/services/userSlice'
 
 export default function Home() {
     const [userName, setUserName] = useState('')
@@ -15,6 +17,11 @@ export default function Home() {
     const MySwal = withReactContent(Swal)
     const [addNewPost, { isLoading }] = useAddNewPostMutation()
     const dispatch = useDispatch()
+    const user = useSelector(getUserState)
+    if (user) {
+        Router.push('/dashboard')
+        return
+    }
     const submitHandler = async (event) => {
         event.preventDefault()
         try {
