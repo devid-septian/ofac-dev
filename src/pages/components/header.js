@@ -9,7 +9,7 @@ import { useDispatch } from 'react-redux'
 import { setUser } from '../../redux/services/userSlice'
 import Router from 'next/router'
 
-export default function Header() {
+export default function Header({ toggleClass }) {
     const dispatch = useDispatch()
     const logoutHandler = () => {
         dispatch(setUser(null))
@@ -19,7 +19,7 @@ export default function Header() {
         <Navbar bg="primary" expand="lg">
             <Container fluid>
                 <div className="d-flex align-items-center">
-                    <Button variant="primary">
+                    <Button variant="primary" onClick={toggleClass}>
                         <img src="/eva_menu-fill.svg" />
                     </Button>
                     <h1>Dashboard</h1>

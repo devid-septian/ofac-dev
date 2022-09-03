@@ -22,7 +22,7 @@ export default function Dashboard() {
     return (
         <>
             <div className={`dashboard ${isActive ? 'show_menu' : null}`}>
-                <Header />
+                <Header toggleClass={toggleClass} />
                 <SideMenu />
                 <Breadcrumb>
                     <Breadcrumb.Item href="#">Home</Breadcrumb.Item>
