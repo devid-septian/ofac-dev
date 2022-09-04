@@ -9,21 +9,87 @@ export const apiSlice = createApi({
     baseQuery: fetchBaseQuery({ baseUrl: 'http://31.220.6.203:7789' }),
     // The "endpoints" represent operations and requests for this server
     endpoints: (builder) => ({
-        // The `getPosts` endpoint is a "query" operation that returns data
-        getPosts: builder.query({
-            // The URL for the request is '/fakeApi/posts'
-            query: () => '/posts',
-        }),
-        addNewPost: builder.mutation({
-            query: (initialPost) => ({
+        login: builder.mutation({
+            query: (requestBody) => ({
                 url: '/user/loginUser',
                 method: 'POST',
-                // Include the entire post object as the body of the request
-                body: initialPost,
+                body: requestBody,
+            }),
+        }),
+        updatePassword: builder.mutation({
+            query: (requestBody) => ({
+                url: '/user/changeUserPassword',
+                method: 'POST',
+                body: requestBody,
+            }),
+        }),
+        getUser: builder.mutation({
+            query: (requestBody) => ({
+                url: '/user/getUser',
+                method: 'POST',
+                body: requestBody,
+            }),
+        }),
+        addUser: builder.mutation({
+            query: (requestBody) => ({
+                url: '/user/addUser',
+                method: 'POST',
+                body: requestBody,
+            }),
+        }),
+        updateUser: builder.mutation({
+            query: (requestBody) => ({
+                url: '/user/updateUser',
+                method: 'POST',
+                body: requestBody,
+            }),
+        }),
+        deleteUser: builder.mutation({
+            query: (requestBody) => ({
+                url: '/user/deleteUser',
+                method: 'POST',
+                body: requestBody,
+            }),
+        }),
+        getRole: builder.mutation({
+            query: () => ({
+                url: '/role/getRole',
+            }),
+        }),
+        addRole: builder.mutation({
+            query: (requestBody) => ({
+                url: '/role/addRole',
+                method: 'POST',
+                body: requestBody,
+            }),
+        }),
+        updateRole: builder.mutation({
+            query: (requestBody) => ({
+                url: '/role/updateRole',
+                method: 'POST',
+                body: requestBody,
+            }),
+        }),
+        deleteRole: builder.mutation({
+            query: (requestBody) => ({
+                url: '/role/deleteRole',
+                method: 'POST',
+                body: requestBody,
             }),
         }),
     }),
 })
 
 // Export the auto-generated hook for the `getPosts` query endpoint
-export const { useGetPostsQuery, useAddNewPostMutation } = apiSlice
+export const {
+    useLoginMutation,
+    useUpdatePasswordMutation,
+    useAddUserMutation,
+    useUpdateUserMutation,
+    useGetUserMutation,
+    useDeleteUserMutation,
+    useGetRoleMutation,
+    useAddRoleMutation,
+    useUpdateRoleMutation,
+    useDeleteRoleMutation,
+} = apiSlice

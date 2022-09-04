@@ -1,4 +1,4 @@
-import { useAddNewPostMutation } from '../redux/services/apiSlice'
+import { useLoginMutation } from '../redux/services/apiSlice'
 import Button from 'react-bootstrap/Button'
 import Form from 'react-bootstrap/Form'
 import Spinner from 'react-bootstrap/Spinner'
@@ -15,7 +15,7 @@ export default function Home() {
     const [userName, setUserName] = useState('')
     const [password, setPassword] = useState('')
     const MySwal = withReactContent(Swal)
-    const [addNewPost, { isLoading }] = useAddNewPostMutation()
+    const [postLogin, { isLoading }] = useLoginMutation()
     const dispatch = useDispatch()
     const user = useSelector(getUserState)
     if (user) {
@@ -29,7 +29,7 @@ export default function Home() {
                 user_name: userName,
                 user_password: password,
             }
-            const data = await addNewPost(requestBody)
+            const data = await postLogin(requestBody)
 
             if (data.data.success) {
                 dispatch(setUser(data.data.data))
