@@ -54683,8 +54683,6 @@ textarea.form-control-lg {
 
 .tab-content {
   padding: 15px !important;
-  border: 1px solid rgba(0, 0, 0, 0.28) !important;
-  box-shadow: 0px 4px 4px 5px rgba(0, 0, 0, 0.15) !important;
 }
 
 /*!
@@ -98681,7 +98679,8 @@ textarea.form-control-lg {
   }
 }
 .dashboard {
-  height: 100vh;
+  height: 100%;
+  min-height: 100%;
   background-color: #E4E1E1;
   padding-top: 108px;
   transition: all 400ms linear;
@@ -98730,7 +98729,7 @@ textarea.form-control-lg {
 }
 
 .data-result .tab-content {
-  padding: 0;
+  padding: 0 !important;
 }
 
 .user-info {
@@ -98772,6 +98771,45 @@ textarea.form-control-lg {
   top: 24px;
   right: 24px;
   color: #ffffff;
+}
+
+.btn-success {
+  color: #ffffff;
+}
+
+.btn-info {
+  color: #ffffff;
+}
+
+.report-data .card-header {
+  justify-content: space-between;
+}
+.report-data .card-header .btn {
+  box-shadow: 0px 4px 3px rgba(0, 0, 0, 0.16);
+}
+.report-data .search-form {
+  display: flex;
+  align-items: flex-end;
+  padding-top: 100px;
+  padding-bottom: 200px;
+  gap: 20px;
+}
+.report-data .search-form .btn {
+  height: 34px;
+}
+.report-data .search-form .form-date {
+  width: 40%;
+}
+.report-data .search-form .form-date label span {
+  color: #dc3545;
+}
+.report-data .search-form .form-date .form-control {
+  height: 34px;
+}
+
+.table {
+  border: 1px solid rgba(0, 0, 0, 0.28) !important;
+  box-shadow: 0px 4px 4px 5px rgba(0, 0, 0, 0.15) !important;
 }
 
 /*# sourceMappingURL=main.css.map */

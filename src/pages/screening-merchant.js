@@ -13,6 +13,7 @@ import Router from 'next/router'
 import CheckIcon from '@mui/icons-material/Check';
 import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
+import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
 import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
 import Table from 'react-bootstrap/Table';
@@ -98,7 +99,7 @@ export default function Dashboard() {
                           <td>Date of Birth</td>
                           <td>Merchant Name</td>
                           <td>Merchant ID</td>
-                          <td>Action</td>
+                          <td><Button variant="primary2"><VisibilityOutlinedIcon /></Button></td>
                         </tr>
                         <tr>
                         <td>Merchant Acc. Name</td>
@@ -106,7 +107,23 @@ export default function Dashboard() {
                           <td>Date of Birth</td>
                           <td>Merchant Name</td>
                           <td>Merchant ID</td>
-                          <td>Action</td>
+                          <td><Button variant="primary2"><VisibilityOutlinedIcon /></Button></td>
+                        </tr>
+                        <tr>
+                        <td>Merchant Acc. Name</td>
+                          <td>ID Number</td>
+                          <td>Date of Birth</td>
+                          <td>Merchant Name</td>
+                          <td>Merchant ID</td>
+                          <td><Button variant="primary2"><VisibilityOutlinedIcon /></Button></td>
+                        </tr>
+                        <tr>
+                        <td>Merchant Acc. Name</td>
+                          <td>ID Number</td>
+                          <td>Date of Birth</td>
+                          <td>Merchant Name</td>
+                          <td>Merchant ID</td>
+                          <td><Button variant="primary2"><VisibilityOutlinedIcon /></Button></td>
                         </tr>
                       </tbody>
                     </Table>
