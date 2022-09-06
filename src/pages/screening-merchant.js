@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import Breadcrumb from 'react-bootstrap/Breadcrumb'
 import Header from '../components/header'
 import SideMenu from '../components/side-menu'
+import Pagination from '../components/pagination'
 import Button from 'react-bootstrap/Button'
 import Card from 'react-bootstrap/Card'
 import Row from 'react-bootstrap/Row'
@@ -127,6 +128,7 @@ export default function Dashboard() {
                         </tr>
                       </tbody>
                     </Table>
+                    <Pagination />
                     </Tab>
                     <Tab eventKey="consolidated" title="Consolidated">
                       
