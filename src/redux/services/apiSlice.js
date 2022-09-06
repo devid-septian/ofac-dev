@@ -7,6 +7,7 @@ export const apiSlice = createApi({
     reducerPath: 'api',
     // All of our requests will have URLs starting with '/fakeApi'
     baseQuery: fetchBaseQuery({ baseUrl: 'http://31.220.6.203:7789' }),
+    mode: 'cors',
     // The "endpoints" represent operations and requests for this server
     endpoints: (builder) => ({
         login: builder.mutation({
