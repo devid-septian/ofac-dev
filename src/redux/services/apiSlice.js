@@ -6,7 +6,14 @@ export const apiSlice = createApi({
     // The cache reducer expects to be added at `state.api` (already default - this is optional)
     reducerPath: 'api',
     // All of our requests will have URLs starting with '/fakeApi'
-    baseQuery: fetchBaseQuery({ baseUrl: 'http://31.220.6.203:7789' }),
+    baseQuery: fetchBaseQuery({
+        baseUrl: 'http://31.220.6.203:7789',
+        prepareHeaders: (headers) => {
+            headers.set('Content-Security-Policy', 'upgrade-insecure-requests')
+            return headers
+        },
+    }),
+    mode: 'cors',
     // The "endpoints" represent operations and requests for this server
     endpoints: (builder) => ({
         login: builder.mutation({
