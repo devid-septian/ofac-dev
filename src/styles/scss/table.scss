@@ -1,0 +1,23 @@
+@use "../custom" as *;
+.table {
+  &.table-striped {
+    > tbody {
+      > tr {
+        td {
+          font-size: 20px;
+          color: #7E7979 !important;
+        }
+        &:first-child {
+          > td {
+            background-color: #ffffff !important;
+          }
+        }
+        &:nth-of-type(odd) {
+          > * {
+            background-color: #E9E4E4 !important;
+          }
+        }
+      }
+    }
+  }
+}
