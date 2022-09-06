@@ -9,6 +9,10 @@
     .side-menu {
       left: 0 !important;
     }
+    .navbar {
+      width: calc(100% - 364px);
+      transition: all 400ms linear;
+    }
   }
 }
 .breadcrumb {
@@ -33,9 +37,17 @@
   height: 108px;
   position: fixed;
   top: 0;
+  right: 0;
+  transition: all 400ms linear;
+  z-index: 1;
 }
 .content-wrapper {
   padding: 20px;
+}
+.data-result {
+  .tab-content {
+    padding: 0;
+  }
 }
 .user-info {
   background-color: #ffffff;
@@ -60,5 +72,23 @@
       color: rgba(0, 0, 0, 0.5);
       margin-bottom: 0;
     }
+  }
+}
+.input-half {
+  width: 66%;
+}
+.filter-data {
+  label {
+    span {
+      color: $danger;
+    }
+  }
+}
+.data-result {
+  .btn-download {
+    position: absolute;
+    top: 24px;
+    right: 24px;
+    color: #ffffff;
   }
 }
