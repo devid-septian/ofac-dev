@@ -2,11 +2,11 @@ import React, { useState } from 'react'
 import Breadcrumb from 'react-bootstrap/Breadcrumb'
 import Header from '../components/header'
 import SideMenu from '../components/side-menu'
-import Button from 'react-bootstrap/Button';
-import Card from 'react-bootstrap/Card';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
-import Form from 'react-bootstrap/Form';
+import Button from 'react-bootstrap/Button'
+import Card from 'react-bootstrap/Card'
+import Row from 'react-bootstrap/Row'
+import Col from 'react-bootstrap/Col'
+import Form from 'react-bootstrap/Form'
 import { useSelector } from 'react-redux'
 import { getUserState } from '../redux/services/userSlice'
 import Router from 'next/router'
@@ -19,7 +19,7 @@ import Tabs from 'react-bootstrap/Tabs';
 import Table from 'react-bootstrap/Table';
 
 export default function Dashboard() {
-    const [isActive, setActive] = useState(false)
+    const [isActive, setActive] = useState(true)
 
     const toggleClass = () => {
         setActive(!isActive)

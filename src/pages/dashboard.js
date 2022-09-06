@@ -9,7 +9,7 @@ import { getUserState } from '../redux/services/userSlice'
 import Router from 'next/router'
 
 export default function Dashboard() {
-    const [isActive, setActive] = useState(false)
+    const [isActive, setActive] = useState(true)
 
     const toggleClass = () => {
         setActive(!isActive)
