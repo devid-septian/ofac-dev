@@ -1,6 +1,7 @@
 @use "../custom" as *;
 .dashboard{
-  height: 100vh;
+  height: 100%;
+  min-height: 100%;
   background-color: #E4E1E1;
   padding-top: 108px;
   transition: all 400ms linear;
@@ -46,7 +47,7 @@
 }
 .data-result {
   .tab-content {
-    padding: 0;
+    padding: 0 !important;
   }
 }
 .user-info {
@@ -91,4 +92,43 @@
     right: 24px;
     color: #ffffff;
   }
+}
+.btn-success {
+  color: #ffffff;
+}
+.btn-info {
+  color: #ffffff;
+}
+.report-data {
+  .card-header {
+    justify-content: space-between;
+    .btn {
+      box-shadow: 0px 4px 3px rgba(0, 0, 0, 0.16);
+    }
+  }
+  .search-form {
+    display: flex;
+    align-items: flex-end;
+    padding-top: 100px;
+    padding-bottom: 200px;
+    gap: 20px;
+    .btn {
+      height: 34px;
+    }
+    .form-date {
+      width: 40%;
+      label {
+        span {
+          color: $danger;
+        }
+      }
+      .form-control {
+        height: 34px;
+      }
+    }
+  }
+}
+.table {
+  border: 1px solid rgba(0, 0, 0, 0.28) !important;
+  box-shadow: 0px 4px 4px 5px rgba(0, 0, 0, 0.15) !important; 
 }
