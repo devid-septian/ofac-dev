@@ -15,10 +15,10 @@ export default function Dashboard() {
         setActive(!isActive)
     }
     const user = useSelector(getUserState)
-    // if (!user) {
-    //     Router.push('/')
-    //     return
-    // }
+    if (!user) {
+        Router.push('/')
+        return
+    }
     return (
         <>
             <div className={`dashboard ${isActive ? 'show_menu' : null}`}>

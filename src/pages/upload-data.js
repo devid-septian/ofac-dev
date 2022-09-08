@@ -190,6 +190,33 @@ export default function Dashboard() {
                             </Row>
                         </Card.Body>
                     </Card>
+                    <Card className="mt-5">
+                        <Card.Header>Result Data</Card.Header>
+                        <Card.Body className="data-result">
+                            <Table striped>
+                                <tbody>
+                                    <tr>
+                                        <td>File Name</td>
+                                        <td>File Type</td>
+                                        <td>Uploaded by</td>
+                                        <td>Uploaded Date</td>
+                                    </tr>
+                                    <tr>
+                                        <td>sdn.xml</td>
+                                        <td>sdn</td>
+                                        <td>Riyan</td>
+                                        <td>22-8-2022</td>
+                                    </tr>
+                                    <tr>
+                                        <td>consolidate.xml</td>
+                                        <td>Consolidate</td>
+                                        <td>Riyan</td>
+                                        <td>22-8-2022</td>
+                                    </tr>
+                                </tbody>
+                            </Table>
+                        </Card.Body>
+                    </Card>
                 </div>
             </div>
         </>

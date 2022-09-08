@@ -8,6 +8,7 @@ import Dropdown from 'react-bootstrap/Dropdown'
 import { useDispatch } from 'react-redux'
 import { setUser } from '../redux/services/userSlice'
 import Router from 'next/router'
+import NotificationsIcon from '@mui/icons-material/Notifications'
 
 export default function Header({ toggleClass }) {
     const dispatch = useDispatch()
@@ -26,17 +27,36 @@ export default function Header({ toggleClass }) {
                 </div>
                 <Form className="d-flex align-items-center">
                     <Dropdown>
-                        <Dropdown.Toggle variant="success" id="dropdown-basic">
-                            Ofac - Merchant
+                        <Dropdown.Toggle id="dropdown-basic">
+                            <NotificationsIcon />
                         </Dropdown.Toggle>
 
-                        <Dropdown.Menu>
+                        <Dropdown.Menu align="end">
+                            <Dropdown.Item>
+                                1 minute ago User Uploaded new File
+                            </Dropdown.Item>
+                            <Dropdown.Divider />
+                            <Dropdown.Item>
+                                1 minute ago User Uploaded new File
+                            </Dropdown.Item>
+                        </Dropdown.Menu>
+                    </Dropdown>
+                    <Dropdown>
+                        <Dropdown.Toggle id="dropdown-basic">
+                            <img src="/icon-user-profile.svg" />
+                        </Dropdown.Toggle>
+
+                        <Dropdown.Menu align="end">
+                            <Dropdown.Item
+                                onClick={() => Router.push('/users')}
+                            >
+                                Users
+                            </Dropdown.Item>
                             <Dropdown.Item onClick={logoutHandler}>
                                 Logout
                             </Dropdown.Item>
                         </Dropdown.Menu>
                     </Dropdown>
-                    <img src="/icon-user-profile.svg" />
                 </Form>
             </Container>
         </Navbar>
