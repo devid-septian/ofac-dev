@@ -91,6 +91,20 @@ export const apiSlice = createApi({
                 body: requestBody,
             }),
         }),
+        checkUploadProcess: builder.mutation({
+            query: (requestBody) => ({
+                url: '/data/checkUpload',
+                method: 'POST',
+                body: requestBody,
+            }),
+        }),
+        getFiles: builder.mutation({
+            query: (requestBody) => ({
+                url: '/data/getFileList',
+                method: 'POST',
+                body: requestBody,
+            }),
+        }),
     }),
 })
 
@@ -107,4 +121,6 @@ export const {
     useUpdateRoleMutation,
     useDeleteRoleMutation,
     useUploadFileMutation,
+    useCheckUploadProcessMutation,
+    useGetFilesMutation,
 } = apiSlice

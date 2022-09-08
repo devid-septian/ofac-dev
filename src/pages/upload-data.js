@@ -1,4 +1,5 @@
-import React, { useState, useRef } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
+import Placeholder from 'react-bootstrap/Placeholder'
 import Breadcrumb from 'react-bootstrap/Breadcrumb'
 import Header from '../components/header'
 import SideMenu from '../components/side-menu'
@@ -7,7 +8,7 @@ import Card from 'react-bootstrap/Card'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 import Form from 'react-bootstrap/Form'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import { getUserState } from '../redux/services/userSlice'
 import Router from 'next/router'
 import CheckIcon from '@mui/icons-material/Check'
@@ -18,9 +19,18 @@ import Tabs from 'react-bootstrap/Tabs'
 import Table from 'react-bootstrap/Table'
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
-import { useUploadFileMutation } from '../redux/services/apiSlice'
+import Spinner from 'react-bootstrap/Spinner'
+import {
+    useUploadFileMutation,
+    useCheckUploadProcessMutation,
+    useGetFilesMutation,
+} from '../redux/services/apiSlice'
+import { setFiles, getFilesState } from '../redux/services/fileSlice'
 
 export default function Dashboard() {
+    const dispatch = useDispatch()
+    const user = useSelector(getUserState)
+    const listFiles = useSelector(getFilesState)
     const sdnRef = useRef(null)
     const consolidateRef = useRef(null)
     const MySwal = withReactContent(Swal)
@@ -32,6 +42,15 @@ export default function Dashboard() {
         useState('No file chosen')
 
     const [postUpload, { isLoading }] = useUploadFileMutation()
+    const [getFiles, { isLoadingFiles }] = useGetFilesMutation()
+    const [checkUploadProcess] = useCheckUploadProcessMutation()
+    useEffect(() => {
+        getListTable()
+    }, [])
+    const getListTable = async () => {
+        const listTable = await getFiles({ user_token: user.User.user_token })
+        dispatch(setFiles(listTable.data.data))
+    }
     const toggleClass = () => {
         setActive(!isActive)
     }
@@ -46,7 +65,6 @@ export default function Dashboard() {
             }
         })
     }
-    const user = useSelector(getUserState)
     if (!user) {
         Router.push('/')
         return
@@ -63,7 +81,7 @@ export default function Dashboard() {
         const result = await getBase64(file)
         setConsolidateFile(result.split(',')[1])
     }
-    const uploadFileHandler = async (file_type) => {
+    const uploadFileHandler = (file_type) => {
         MySwal.fire({
             title: `Upload File ${file_type === 'sdn' ? 'Sdn' : 'Consolidate'}`,
             text: 'Do you want to upload file ?',
@@ -71,7 +89,7 @@ export default function Dashboard() {
             showCancelButton: true,
             confirmButtonText: 'OK',
             showLoaderOnConfirm: true,
-            preConfirm: () => {
+            preConfirm: async () => {
                 if (file_type === 'sdn' && sdnFile === null) {
                     MySwal.showValidationMessage(sdnFileName)
                     return
@@ -80,23 +98,36 @@ export default function Dashboard() {
                     MySwal.showValidationMessage(consolidateFileName)
                     return
                 }
-                const requestBody = {
-                    file_name:
-                        file_type === 'sdn' ? sdnFileName : consolidateFileName,
-                    file_data: file_type === 'sdn' ? sdnFile : consolidateFile,
-                    user_token: user.User.user_token,
-                    file_type,
+                const dataCheck = await checkUploadProcess({ file_type })
+                if (dataCheck.data.success) {
+                    const requestBody = {
+                        file_name:
+                            file_type === 'sdn'
+                                ? sdnFileName
+                                : consolidateFileName,
+                        file_data:
+                            file_type === 'sdn' ? sdnFile : consolidateFile,
+                        user_token: user.User.user_token,
+                        file_type,
+                    }
+                    return postUpload(requestBody)
+                        .then((response) => {
+                            return response
+                        })
+                        .catch((error) => {
+                            MySwal.showValidationMessage(
+                                `Request failed: ${error}`
+                            )
+                        })
+                } else {
+                    MySwal.showValidationMessage(
+                        'Already have processing upload, please try again'
+                    )
                 }
-                return postUpload(requestBody)
-                    .then((response) => {
-                        return response
-                    })
-                    .catch((error) => {
-                        MySwal.showValidationMessage(`Request failed: ${error}`)
-                    })
             },
             allowOutsideClick: () => isLoading,
         }).then((result) => {
+            getListTable()
             if (result.isConfirmed) {
                 if (file_type === 'sdn') {
                     sdnRef.current.value = null
@@ -191,28 +222,32 @@ export default function Dashboard() {
                         </Card.Body>
                     </Card>
                     <Card className="mt-5">
-                        <Card.Header>Result Data</Card.Header>
+                        <Card.Header>
+                            Result Data &nbsp;
+                            {isLoadingFiles && (
+                                <Spinner animation="border" variant="light" />
+                            )}
+                        </Card.Header>
                         <Card.Body className="data-result">
                             <Table striped>
                                 <tbody>
                                     <tr>
                                         <td>File Name</td>
                                         <td>File Type</td>
+                                        <td>Status</td>
                                         <td>Uploaded by</td>
                                         <td>Uploaded Date</td>
                                     </tr>
-                                    <tr>
-                                        <td>sdn.xml</td>
-                                        <td>sdn</td>
-                                        <td>Riyan</td>
-                                        <td>22-8-2022</td>
-                                    </tr>
-                                    <tr>
-                                        <td>consolidate.xml</td>
-                                        <td>Consolidate</td>
-                                        <td>Riyan</td>
-                                        <td>22-8-2022</td>
-                                    </tr>
+
+                                    {listFiles.map((file) => (
+                                        <tr key={file.sdnfile_id}>
+                                            <td>{file.file_name_ori}</td>
+                                            <td>{file.file_type}</td>
+                                            <td>{file.status}</td>
+                                            <td>{file.updated_by}</td>
+                                            <td>{file.updated_date}</td>
+                                        </tr>
+                                    ))}
                                 </tbody>
                             </Table>
                         </Card.Body>

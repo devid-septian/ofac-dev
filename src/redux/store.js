@@ -1,5 +1,6 @@
 import { configureStore, getDefaultMiddleware } from '@reduxjs/toolkit'
 import userSlice from './services/userSlice'
+import fileSlice from './services/fileSlice'
 import { apiSlice } from './services/apiSlice'
 import storage from 'redux-persist/lib/storage'
 import { combineReducers } from 'redux'
@@ -18,6 +19,7 @@ import {
  */
 const reducers = combineReducers({
     user: userSlice,
+    file: fileSlice,
     [apiSlice.reducerPath]: apiSlice.reducer,
 })
 
