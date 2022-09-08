@@ -239,15 +239,16 @@ export default function Dashboard() {
                                         <td>Uploaded Date</td>
                                     </tr>
 
-                                    {listFiles.map((file) => (
-                                        <tr key={file.sdnfile_id}>
-                                            <td>{file.file_name_ori}</td>
-                                            <td>{file.file_type}</td>
-                                            <td>{file.status}</td>
-                                            <td>{file.updated_by}</td>
-                                            <td>{file.updated_date}</td>
-                                        </tr>
-                                    ))}
+                                    {listFiles &&
+                                        listFiles.map((file) => (
+                                            <tr key={file.sdnfile_id}>
+                                                <td>{file.file_name_ori}</td>
+                                                <td>{file.file_type}</td>
+                                                <td>{file.status}</td>
+                                                <td>{file.updated_by}</td>
+                                                <td>{file.updated_date}</td>
+                                            </tr>
+                                        ))}
                                 </tbody>
                             </Table>
                         </Card.Body>
