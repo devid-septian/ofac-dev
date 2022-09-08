@@ -7,6 +7,7 @@ import Button from 'react-bootstrap/Button'
 import Card from 'react-bootstrap/Card'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
+import Container from 'react-bootstrap/Container';
 import Form from 'react-bootstrap/Form'
 import { useSelector } from 'react-redux'
 import { getUserState } from '../redux/services/userSlice'
@@ -18,8 +19,11 @@ import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
 import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
 import Table from 'react-bootstrap/Table';
+import Modal from 'react-bootstrap/Modal';
+import Accordion from 'react-bootstrap/Accordion';
 
 export default function Dashboard() {
+    const [modalShow, setModalShow] = React.useState(false);
     const [isActive, setActive] = useState(true)
 
     const toggleClass = () => {
@@ -30,6 +34,98 @@ export default function Dashboard() {
     //     Router.push('/')
     //     return
     // }
+    function MyVerticallyCenteredModal(props) {
+      return (
+        <Modal
+          {...props}
+          size="lg"
+          aria-labelledby="contained-modal-title-vcenter"
+          centered
+        >
+          <Modal.Header closeButton>
+            <Modal.Title id="contained-modal-title-vcenter">
+              Show Detail
+            </Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <Container>
+              <Row>
+                <Col xs={5} >
+                  <div className="detail-box">
+                    <label>Merchant Name:</label>
+                    <p>XXI.PIM</p>
+                  </div>
+                  <div className="detail-box">
+                    <label>ID Number:</label>
+                    <p>3490xxxxxxxxxxx</p>
+                  </div>
+                  <div className="detail-box">
+                    <label>First Name:</label>
+                    <p>Archie</p>
+                  </div>
+                  <div className="detail-box">
+                    <label>Place of Birth:</label>
+                    <p>Padang</p>
+                  </div>
+                </Col>
+                <Col xs={7}>
+                  <div className="detail-box">
+                    <label>Merchant Account Name:</label>
+                    <p>XXI Pd. Indah Mall</p>
+                  </div>
+                  <div className="detail-box">
+                    <label>Merchant ID Number:</label>
+                    <p>100-016156xxx</p>
+                  </div>
+                  <div className="detail-box">
+                    <label>Last Name:</label>
+                    <p>ASD</p>
+                  </div>
+                  <div className="detail-box">
+                    <label>Date of Birth:</label>
+                    <p>August 14, 1971</p>
+                  </div>
+                </Col>
+              </Row>
+              <Accordion className="accordion-detail mt-4" defaultActiveKey={['0']} alwaysOpen>
+                <Accordion.Item eventKey="0">
+                  <Accordion.Header>Address Info</Accordion.Header>
+                  <Accordion.Body>
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+                    eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
+                    minim veniam, quis nostrud exercitation ullamco laboris nisi ut
+                  </Accordion.Body>
+                </Accordion.Item>
+                <Accordion.Item eventKey="1">
+                  <Accordion.Header>Citizenship Info</Accordion.Header>
+                  <Accordion.Body>
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+                    eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
+                    minim veniam, quis nostrud exercitation ullamco laboris nisi ut
+                  </Accordion.Body>
+                </Accordion.Item>
+                <Accordion.Item eventKey="2">
+                  <Accordion.Header>Nationality Info</Accordion.Header>
+                  <Accordion.Body>
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+                    eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
+                    minim veniam, quis nostrud exercitation ullamco laboris nisi ut
+                  </Accordion.Body>
+                </Accordion.Item>
+                <Accordion.Item eventKey="3">
+                  <Accordion.Header>Others Info</Accordion.Header>
+                  <Accordion.Body>
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+                    eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
+                    minim veniam, quis nostrud exercitation ullamco laboris nisi ut
+                  </Accordion.Body>
+                </Accordion.Item>
+              </Accordion>
+            </Container>
+          </Modal.Body>
+        </Modal>
+      );
+    }
     return (
       <>
         <div className={`dashboard ${isActive ? 'show_menu' : null}`}>
@@ -100,7 +196,7 @@ export default function Dashboard() {
                           <td>Date of Birth</td>
                           <td>Merchant Name</td>
                           <td>Merchant ID</td>
-                          <td><Button variant="primary2"><VisibilityOutlinedIcon /></Button></td>
+                          <td><Button variant="primary2" onClick={() => setModalShow(true)}><VisibilityOutlinedIcon /></Button></td>
                         </tr>
                         <tr>
                         <td>Merchant Acc. Name</td>
@@ -145,6 +241,10 @@ export default function Dashboard() {
               </Card>
             </div>
         </div>
+        <MyVerticallyCenteredModal
+          show={modalShow}
+          onHide={() => setModalShow(false)}
+        />
       </>
     )
 }

@@ -1,0 +1,15 @@
+@use "../custom" as *;
+.modal {
+	.modal-dialog {
+		.modal-content {
+      border-radius: 0;
+			border-radius: 0;
+			.modal-header {
+				border-top-left-radius: 0;
+				border-top-right-radius: 0;
+        padding-left: 24px;
+        padding-right: 24px;
+			}
+		}
+	}
+}
