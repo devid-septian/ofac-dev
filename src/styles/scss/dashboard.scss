@@ -132,3 +132,63 @@
   border: 1px solid rgba(0, 0, 0, 0.28) !important;
   box-shadow: 0px 4px 4px 5px rgba(0, 0, 0, 0.15) !important; 
 }
+.detail-box {
+  margin-bottom: 20px;
+  label {
+    font-size: 22px;
+    font-weight: 600;
+    color: #000000;
+  }
+  p {
+    font-size: 22px;
+    font-weight: 300;
+    color: #000000;
+    margin-bottom: 0;
+  }
+}
+.accordion {
+  &.accordion-detail {
+    position: relative;
+    border: none;
+    .accordion-item {
+      border: none;
+    }
+    .accordion-header {
+      position: relative;
+      padding-left: 0;
+      border: none;
+      button {
+        background-color: transparent;
+        border: none;
+        font-size: 22px;
+        font-weight: 600;
+        padding-left: 28px;
+        position: relative;
+        border-bottom: 0;
+        color: #000000;
+        &:focus {
+          outline: 0 none !important;
+          box-shadow: none !important;
+        }
+        &::after {
+          position: absolute;
+          top: 16px;
+          left: 0;
+          transform: rotate(-90deg);
+        }
+        &:not(.collapsed) {
+          &::after {
+            transform: rotate(-180deg);
+            background-image: var(--bs-accordion-btn-icon);
+          }
+        }
+      }
+    }
+    .accordion-collapse {
+      .accordion-bodu {
+        padding-left: 0;
+        padding-right: 0;
+      }
+    }
+  }
+}
