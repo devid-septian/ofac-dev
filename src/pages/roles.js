@@ -26,13 +26,13 @@ export default function Dashboard() {
     const [isActive, setActive] = useState(true)
     const [showModal, setShowModal] = useState(false)
     const [listRoles, setListRoles] = useState([])
-    const [roleData, setRoleData] = useState({
-        role_name: '',
-    })
+    const [roleNameData, setRoleNameData] = useState('')
+    const [roleIdData, setRoleIdData] = useState('')
+    const [roleStatusData, setRoleStatusData] = useState('')
     const [isEdit, setIsEdit] = useState(false)
     const [getRole] = useGetRoleMutation()
     const [addRole, { isLoadingAdd }] = useAddRoleMutation()
-    const [updateRole, { isLoadingUpdate }] = useAddRoleMutation()
+    const [updateRole, { isLoadingUpdate }] = useUpdateRoleMutation()
     const [deleteRole, { isLoadingDelete }] = useDeleteRoleMutation()
     const MySwal = withReactContent(Swal)
 
@@ -43,12 +43,12 @@ export default function Dashboard() {
         if (user) {
             console.log(user)
             setIsEdit(true)
-            setRoleData(user)
+            setRoleNameData(user.role_name)
+            setRoleStatusData(user.status)
+            setRoleIdData(user.role_id)
         } else {
             setIsEdit(false)
-            setRoleData({
-                role_name: '',
-            })
+            setRoleNameData('')
         }
         setShowModal(true)
     }
@@ -62,15 +62,16 @@ export default function Dashboard() {
     const submitHandler = async () => {
         const dataRequest = isEdit
             ? {
-                  role_name: roleData.role_name,
+                  role_name: roleNameData,
                   user_token: user.User.user_token,
-                  status: roleData.status,
-                  role_id: roleData.role_id,
+                  status: roleStatusData,
+                  role_id: roleIdData,
               }
             : {
-                  role_name: roleData.role_name,
+                  role_name: roleNameData,
                   user_token: user.User.user_token,
               }
+        console.log(dataRequest)
         const result = isEdit
             ? await updateRole(dataRequest)
             : await addRole(dataRequest)
@@ -169,12 +170,10 @@ export default function Dashboard() {
                             >
                                 <Form.Control
                                     type="text"
-                                    value={roleData.role_name}
-                                    onChange={(e) => {
-                                        setRoleData({
-                                            role_name: e.target.value,
-                                        })
-                                    }}
+                                    value={roleNameData}
+                                    onChange={(e) =>
+                                        setRoleNameData(e.target.value)
+                                    }
                                 />
                             </Form.Group>
                         </Col>
