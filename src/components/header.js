@@ -52,6 +52,11 @@ export default function Header({ toggleClass }) {
                             >
                                 Users
                             </Dropdown.Item>
+                            <Dropdown.Item
+                                onClick={() => Router.push('/roles')}
+                            >
+                                Roles
+                            </Dropdown.Item>
                             <Dropdown.Item onClick={logoutHandler}>
                                 Logout
                             </Dropdown.Item>

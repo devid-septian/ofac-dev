@@ -1,26 +1,35 @@
-import React, { useState } from 'react'
-import Breadcrumb from 'react-bootstrap/Breadcrumb'
+import React, { useState, useEffect } from 'react'
 import Header from '../components/header'
 import SideMenu from '../components/side-menu'
 import Pagination from '../components/pagination'
 import Button from 'react-bootstrap/Button'
 import Card from 'react-bootstrap/Card'
-import Row from 'react-bootstrap/Row'
-import Col from 'react-bootstrap/Col'
-import Form from 'react-bootstrap/Form'
 import { useSelector } from 'react-redux'
 import { getUserState } from '../redux/services/userSlice'
 import Router from 'next/router'
-import CheckIcon from '@mui/icons-material/Check'
 import DeleteIcon from '@mui/icons-material/Delete'
-import FileDownloadIcon from '@mui/icons-material/FileDownload'
 import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined'
-import Tab from 'react-bootstrap/Tab'
-import Tabs from 'react-bootstrap/Tabs'
 import Table from 'react-bootstrap/Table'
+import { useGetUserMutation } from '../redux/services/apiSlice'
 
 export default function Dashboard() {
     const [isActive, setActive] = useState(true)
+    const [listUser, setListUser] = useState([])
+    const [getUser, { isLoading }] = useGetUserMutation()
+    const getListUser = async () => {
+        const listUserApi = await getUser({
+            user_name: '',
+            user_full_name: '',
+            role_id: 1,
+            status: '',
+            user_organization: '',
+            user_token: user.User.user_token,
+        })
+        setListUser(listUserApi.data.data)
+    }
+    useEffect(() => {
+        getListUser()
+    }, [])
 
     const toggleClass = () => {
         setActive(!isActive)
@@ -52,26 +61,36 @@ export default function Dashboard() {
                                             </Button>
                                         </td>
                                     </tr>
-                                    <tr>
-                                        <td>Riyan</td>
-                                        <td>Active</td>
-                                        <td>Admin</td>
-                                        <td>Appfuxion</td>
-                                        <td>
-                                            <Button variant="primary2">
-                                                <VisibilityOutlinedIcon />
-                                            </Button>
-                                            &nbsp;
-                                            <Button variant="danger">
-                                                <DeleteIcon
-                                                    style={{ color: 'white' }}
-                                                />
-                                            </Button>
-                                        </td>
-                                    </tr>
+                                    {listUser.map((user) => (
+                                        <>
+                                            <tr>
+                                                <td>{user.User.user_name}</td>
+                                                <td>{user.User.status}</td>
+                                                <td>{user.Role.role_name}</td>
+                                                <td>
+                                                    {
+                                                        user.User
+                                                            .user_organization
+                                                    }
+                                                </td>
+                                                <td>
+                                                    <Button variant="primary2">
+                                                        <VisibilityOutlinedIcon />
+                                                    </Button>
+                                                    &nbsp;
+                                                    <Button variant="danger">
+                                                        <DeleteIcon
+                                                            style={{
+                                                                color: 'white',
+                                                            }}
+                                                        />
+                                                    </Button>
+                                                </td>
+                                            </tr>
+                                        </>
+                                    ))}
                                 </tbody>
                             </Table>
-                            <Pagination />
                         </Card.Body>
                     </Card>
                 </div>

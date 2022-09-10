@@ -9,11 +9,13 @@ export const apiSlice = createApi({
     baseQuery: fetchBaseQuery({
         baseUrl: 'http://31.220.6.203:7789',
         prepareHeaders: (headers) => {
-            headers.set('Content-Security-Policy', 'upgrade-insecure-requests')
+            headers.set(
+                'Access-Control-Allow-Origin',
+                'http://31.220.6.203:7789'
+            )
             return headers
         },
     }),
-    mode: 'cors',
     // The "endpoints" represent operations and requests for this server
     endpoints: (builder) => ({
         login: builder.mutation({
@@ -59,8 +61,10 @@ export const apiSlice = createApi({
             }),
         }),
         getRole: builder.mutation({
-            query: () => ({
+            query: (requestBody) => ({
                 url: '/role/getRole',
+                method: 'POST',
+                body: requestBody,
             }),
         }),
         addRole: builder.mutation({
