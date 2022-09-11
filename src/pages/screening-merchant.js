@@ -1,29 +1,54 @@
-import React, { useState } from 'react'
-import Breadcrumb from 'react-bootstrap/Breadcrumb'
+import React, { useState, useEffect } from 'react'
 import Header from '../components/header'
 import SideMenu from '../components/side-menu'
 import Pagination from '../components/pagination'
-import Button from 'react-bootstrap/Button'
-import Card from 'react-bootstrap/Card'
-import Row from 'react-bootstrap/Row'
-import Col from 'react-bootstrap/Col'
-import Container from 'react-bootstrap/Container'
-import Form from 'react-bootstrap/Form'
+import {
+    Button,
+    Card,
+    Row,
+    Col,
+    Form,
+    Tab,
+    Tabs,
+    Table,
+    Spinner,
+} from 'react-bootstrap'
 import { useSelector } from 'react-redux'
 import { getUserState } from '../redux/services/userSlice'
 import Router from 'next/router'
 import CheckIcon from '@mui/icons-material/Check'
 import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined'
-import FileDownloadIcon from '@mui/icons-material/FileDownload'
 import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined'
-import Tab from 'react-bootstrap/Tab'
-import Tabs from 'react-bootstrap/Tabs'
-import Table from 'react-bootstrap/Table'
-import Modal from 'react-bootstrap/Modal'
-import Accordion from 'react-bootstrap/Accordion'
+import { useGetDataMerchantMutation } from '../redux/services/apiSlice'
+import MyVerticallyCenteredModal from '../components/modal-merchant'
+import DatePicker from 'react-datepicker'
+import 'react-datepicker/dist/react-datepicker.css'
 
 export default function Dashboard() {
-    const [modalShow, setModalShow] = React.useState(false)
+    const [getDataMerchant, { isLoading }] = useGetDataMerchantMutation()
+    const [firstName, setFirstName] = useState('')
+    const [lastName, setLastName] = useState('')
+    const [idNumber, setIdNumber] = useState('')
+    const [dob, setDob] = useState('')
+    const [sdnData, setSdnData] = useState([])
+    const [consolidateData, setConsolidateData] = useState([])
+    const [merchantDetail, setMerchantDetail] = useState({
+        pob: [],
+        nationality: [],
+        addrees: [],
+        aka: [],
+        dob: [],
+        citizenship: [],
+        header: {
+            id_number: '-',
+            dob: '-',
+            last_name: '',
+            first_name: '',
+        },
+        id: [],
+        program: [],
+    })
+    const [modalShow, setModalShow] = useState(false)
     const [isActive, setActive] = useState(true)
 
     const toggleClass = () => {
@@ -35,116 +60,97 @@ export default function Dashboard() {
         Router.push('/')
         return
     }
-    function MyVerticallyCenteredModal(props) {
-        return (
-            <Modal
-                {...props}
-                size="lg"
-                aria-labelledby="contained-modal-title-vcenter"
-                centered
-            >
-                <Modal.Header closeButton>
-                    <Modal.Title id="contained-modal-title-vcenter">
-                        Show Detail
-                    </Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    <Container>
-                        <Row>
-                            <Col xs={5}>
-                                <div className="detail-box">
-                                    <label>Merchant Name:</label>
-                                    <p>XXI.PIM</p>
-                                </div>
-                                <div className="detail-box">
-                                    <label>ID Number:</label>
-                                    <p>3490xxxxxxxxxxx</p>
-                                </div>
-                                <div className="detail-box">
-                                    <label>First Name:</label>
-                                    <p>Archie</p>
-                                </div>
-                                <div className="detail-box">
-                                    <label>Place of Birth:</label>
-                                    <p>Padang</p>
-                                </div>
-                            </Col>
-                            <Col xs={7}>
-                                <div className="detail-box">
-                                    <label>Merchant Account Name:</label>
-                                    <p>XXI Pd. Indah Mall</p>
-                                </div>
-                                <div className="detail-box">
-                                    <label>Merchant ID Number:</label>
-                                    <p>100-016156xxx</p>
-                                </div>
-                                <div className="detail-box">
-                                    <label>Last Name:</label>
-                                    <p>ASD</p>
-                                </div>
-                                <div className="detail-box">
-                                    <label>Date of Birth:</label>
-                                    <p>August 14, 1971</p>
-                                </div>
-                            </Col>
-                        </Row>
-                        <Accordion
-                            className="accordion-detail mt-4"
-                            defaultActiveKey={['0']}
-                            alwaysOpen
-                        >
-                            <Accordion.Item eventKey="0">
-                                <Accordion.Header>
-                                    Address Info
-                                </Accordion.Header>
-                                <Accordion.Body>
-                                    Lorem ipsum dolor sit amet, consectetur
-                                    adipiscing elit, sed do eiusmod tempor
-                                    incididunt ut labore et dolore magna aliqua.
-                                    Ut enim ad minim veniam, quis nostrud
-                                    exercitation ullamco laboris nisi ut
-                                </Accordion.Body>
-                            </Accordion.Item>
-                            <Accordion.Item eventKey="1">
-                                <Accordion.Header>
-                                    Citizenship Info
-                                </Accordion.Header>
-                                <Accordion.Body>
-                                    Lorem ipsum dolor sit amet, consectetur
-                                    adipiscing elit, sed do eiusmod tempor
-                                    incididunt ut labore et dolore magna aliqua.
-                                    Ut enim ad minim veniam, quis nostrud
-                                    exercitation ullamco laboris nisi ut
-                                </Accordion.Body>
-                            </Accordion.Item>
-                            <Accordion.Item eventKey="2">
-                                <Accordion.Header>
-                                    Nationality Info
-                                </Accordion.Header>
-                                <Accordion.Body>
-                                    Lorem ipsum dolor sit amet, consectetur
-                                    adipiscing elit, sed do eiusmod tempor
-                                    incididunt ut labore et dolore magna aliqua.
-                                    Ut enim ad minim veniam, quis nostrud
-                                    exercitation ullamco laboris nisi ut
-                                </Accordion.Body>
-                            </Accordion.Item>
-                            <Accordion.Item eventKey="3">
-                                <Accordion.Header>Others Info</Accordion.Header>
-                                <Accordion.Body>
-                                    Lorem ipsum dolor sit amet, consectetur
-                                    adipiscing elit, sed do eiusmod tempor
-                                    incididunt ut labore et dolore magna aliqua.
-                                    Ut enim ad minim veniam, quis nostrud
-                                    exercitation ullamco laboris nisi ut
-                                </Accordion.Body>
-                            </Accordion.Item>
-                        </Accordion>
-                    </Container>
-                </Modal.Body>
-            </Modal>
-        )
+
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    useEffect(() => {
+        getListDataMerchant()
+    }, [])
+
+    const getListDataMerchant = async () => {
+        let dataDob = ''
+        if (dob.length !== 0) {
+            const monthNames = [
+                'Jan',
+                'Feb',
+                'Mar',
+                'Apr',
+                'May',
+                'Jun',
+                'Jul',
+                'Aug',
+                'Sep',
+                'Oct',
+                'Nov',
+                'Dec',
+            ]
+            const parsingDate = new Date(dob)
+            const date = parsingDate.getDate()
+            const month = monthNames[parsingDate.getMonth()]
+            const year = parsingDate.getFullYear()
+            dataDob = `${date} ${month} ${year}`
+        }
+        try {
+            const requestBody = {
+                first_name: firstName,
+                last_name: lastName,
+                id_number: idNumber,
+                dob: dataDob,
+                limit: 10,
+                offset: 1,
+                user_token: 'c2FyZXF1ZXN0ZXIxODJmYTM1OTA2M3lWc2wwM1MzOWg=',
+            }
+            const listDataMerchant = await getDataMerchant(requestBody)
+            setSdnData(listDataMerchant.data.data.sdnData)
+            setConsolidateData(listDataMerchant.data.data.consalData)
+        } catch (error) {
+            MySwal.fire({
+                icon: 'error',
+                title: 'Failed',
+                text: 'Failed to Get List Data Merchant',
+                showConfirmButton: false,
+                timer: 1500,
+            })
+        }
     }
+
+    const applyHandler = async () => {
+        await getListDataMerchant()
+    }
+
+    const cancelHandler = async () => {
+        try {
+            setFirstName('')
+            setLastName('')
+            setIdNumber('')
+            setDob('')
+            const requestBody = {
+                first_name: '',
+                last_name: '',
+                id_number: '',
+                dob: '',
+                limit: 10,
+                offset: 1,
+                user_token: 'c2FyZXF1ZXN0ZXIxODJmYTM1OTA2M3lWc2wwM1MzOWg=',
+            }
+            const listDataMerchant = await getDataMerchant(requestBody)
+            setSdnData(listDataMerchant.data.data.sdnData)
+            setConsolidateData(listDataMerchant.data.data.consalData)
+        } catch (error) {
+            MySwal.fire({
+                icon: 'error',
+                title: 'Failed',
+                text: 'Failed to Get List Data Merchant',
+                showConfirmButton: false,
+                timer: 1500,
+            })
+        }
+    }
+
+    const viewHandler = (data) => {
+        setModalShow(true)
+        setMerchantDetail(data)
+    }
+
     return (
         <>
             <div className={`dashboard ${isActive ? 'show_menu' : null}`}>
@@ -157,7 +163,7 @@ export default function Dashboard() {
                             <Row>
                                 <Col sm={4}>
                                     <Form.Label>
-                                        Merchant Account Name <span>*</span>
+                                        First Name <span>*</span>
                                     </Form.Label>
                                 </Col>
                                 <Col sm={8}>
@@ -165,7 +171,32 @@ export default function Dashboard() {
                                         className="mb-3 input-half"
                                         controlId="dataForm.ControlInputAccount"
                                     >
-                                        <Form.Control type="text" />
+                                        <Form.Control
+                                            type="text"
+                                            value={firstName}
+                                            onChange={(e) =>
+                                                setFirstName(e.target.value)
+                                            }
+                                        />
+                                    </Form.Group>
+                                </Col>
+                                <Col sm={4}>
+                                    <Form.Label>
+                                        Last Name <span>*</span>
+                                    </Form.Label>
+                                </Col>
+                                <Col sm={8}>
+                                    <Form.Group
+                                        className="mb-3 input-half"
+                                        controlId="dataForm.ControlInputAccount"
+                                    >
+                                        <Form.Control
+                                            type="text"
+                                            value={lastName}
+                                            onChange={(e) =>
+                                                setLastName(e.target.value)
+                                            }
+                                        />
                                     </Form.Group>
                                 </Col>
                                 <Col sm={4}>
@@ -178,7 +209,13 @@ export default function Dashboard() {
                                         className="mb-3 input-half"
                                         controlId="dataForm.ControlInputId"
                                     >
-                                        <Form.Control type="text" />
+                                        <Form.Control
+                                            type="text"
+                                            value={idNumber}
+                                            onChange={(e) =>
+                                                setIdNumber(e.target.value)
+                                            }
+                                        />
                                     </Form.Group>
                                 </Col>
                                 <Col sm={4}>
@@ -189,22 +226,51 @@ export default function Dashboard() {
                                         className="mb-3 input-half"
                                         controlId="dataForm.ControlInputBirth"
                                     >
-                                        <Form.Control type="text" />
+                                        <DatePicker
+                                            selected={dob}
+                                            onChange={(date) => {
+                                                setDob(date)
+                                            }}
+                                            className="form-control"
+                                            customInput={
+                                                <input
+                                                    type="text"
+                                                    id="validationCustom01"
+                                                />
+                                            }
+                                            dateFormat="dd-MM-yyyy"
+                                            showYearDropdown
+                                            yearDropdownItemNumber={70}
+                                            scrollableYearDropdown
+                                        />
                                     </Form.Group>
                                 </Col>
                             </Row>
-                            <Button variant="primary2 me-2" size="sm">
+                            <Button
+                                variant="primary2 me-2"
+                                size="sm"
+                                onClick={applyHandler}
+                            >
                                 <CheckIcon />
                                 Apply
                             </Button>
-                            <Button variant="secondary" size="sm">
+                            <Button
+                                variant="secondary"
+                                size="sm"
+                                onClick={cancelHandler}
+                            >
                                 <CloseOutlinedIcon />
                                 Clear
                             </Button>
                         </Card.Body>
                     </Card>
                     <Card className="mt-5">
-                        <Card.Header>Result Data</Card.Header>
+                        <Card.Header>
+                            Result Data &nbsp;{' '}
+                            {isLoading && (
+                                <Spinner animation="border" variant="light" />
+                            )}
+                        </Card.Header>
                         <Card.Body className="data-result">
                             <Tabs
                                 defaultActiveKey="cdn"
@@ -215,66 +281,49 @@ export default function Dashboard() {
                                     <Table striped>
                                         <tbody>
                                             <tr>
-                                                <td>Merchant Acc. Name</td>
-                                                <td>ID Number</td>
+                                                <td>First Name</td>
+                                                <td>Last Name</td>
                                                 <td>Date of Birth</td>
-                                                <td>Merchant Name</td>
-                                                <td>Merchant ID</td>
+                                                <td>ID Number</td>
                                                 <td>Action</td>
                                             </tr>
-                                            <tr>
-                                                <td>Merchant Acc. Name</td>
-                                                <td>ID Number</td>
-                                                <td>Date of Birth</td>
-                                                <td>Merchant Name</td>
-                                                <td>Merchant ID</td>
-                                                <td>
-                                                    <Button
-                                                        variant="primary2"
-                                                        onClick={() =>
-                                                            setModalShow(true)
+                                            {sdnData.map((dataSdn, index) => (
+                                                <tr key={index}>
+                                                    <td>
+                                                        {
+                                                            dataSdn.header
+                                                                .first_name
                                                         }
-                                                    >
-                                                        <VisibilityOutlinedIcon />
-                                                    </Button>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>Merchant Acc. Name</td>
-                                                <td>ID Number</td>
-                                                <td>Date of Birth</td>
-                                                <td>Merchant Name</td>
-                                                <td>Merchant ID</td>
-                                                <td>
-                                                    <Button variant="primary2">
-                                                        <VisibilityOutlinedIcon />
-                                                    </Button>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>Merchant Acc. Name</td>
-                                                <td>ID Number</td>
-                                                <td>Date of Birth</td>
-                                                <td>Merchant Name</td>
-                                                <td>Merchant ID</td>
-                                                <td>
-                                                    <Button variant="primary2">
-                                                        <VisibilityOutlinedIcon />
-                                                    </Button>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>Merchant Acc. Name</td>
-                                                <td>ID Number</td>
-                                                <td>Date of Birth</td>
-                                                <td>Merchant Name</td>
-                                                <td>Merchant ID</td>
-                                                <td>
-                                                    <Button variant="primary2">
-                                                        <VisibilityOutlinedIcon />
-                                                    </Button>
-                                                </td>
-                                            </tr>
+                                                    </td>
+                                                    <td>
+                                                        {
+                                                            dataSdn.header
+                                                                .last_name
+                                                        }
+                                                    </td>
+                                                    <td>
+                                                        {dataSdn.header.dob}
+                                                    </td>
+                                                    <td>
+                                                        {
+                                                            dataSdn.header
+                                                                .id_number
+                                                        }
+                                                    </td>
+                                                    <td>
+                                                        <Button
+                                                            variant="primary2"
+                                                            onClick={() =>
+                                                                viewHandler(
+                                                                    dataSdn
+                                                                )
+                                                            }
+                                                        >
+                                                            <VisibilityOutlinedIcon />
+                                                        </Button>
+                                                    </td>
+                                                </tr>
+                                            ))}
                                         </tbody>
                                     </Table>
                                     <Pagination />
@@ -282,17 +331,66 @@ export default function Dashboard() {
                                 <Tab
                                     eventKey="consolidated"
                                     title="Consolidated"
-                                ></Tab>
-                                <Tab eventKey="amex" title="AMEX"></Tab>
+                                >
+                                    <Table striped>
+                                        <tbody>
+                                            <tr>
+                                                <td>First Name</td>
+                                                <td>Last Name</td>
+                                                <td>Date of Birth</td>
+                                                <td>ID Number</td>
+                                                <td>Action</td>
+                                            </tr>
+                                            {consolidateData.map(
+                                                (dataConsol, index) => (
+                                                    <tr key={index}>
+                                                        <td>
+                                                            {
+                                                                dataConsol
+                                                                    .header
+                                                                    .first_name
+                                                            }
+                                                        </td>
+                                                        <td>
+                                                            {
+                                                                dataConsol
+                                                                    .header
+                                                                    .last_name
+                                                            }
+                                                        </td>
+                                                        <td>
+                                                            {
+                                                                dataConsol
+                                                                    .header.dob
+                                                            }
+                                                        </td>
+                                                        <td>
+                                                            {
+                                                                dataConsol
+                                                                    .header
+                                                                    .id_number
+                                                            }
+                                                        </td>
+                                                        <td>
+                                                            <Button
+                                                                variant="primary2"
+                                                                onClick={() =>
+                                                                    viewHandler(
+                                                                        dataConsol
+                                                                    )
+                                                                }
+                                                            >
+                                                                <VisibilityOutlinedIcon />
+                                                            </Button>
+                                                        </td>
+                                                    </tr>
+                                                )
+                                            )}
+                                        </tbody>
+                                    </Table>
+                                    <Pagination />
+                                </Tab>
                             </Tabs>
-                            <Button
-                                className="btn-download"
-                                variant="success"
-                                size="sm"
-                            >
-                                <FileDownloadIcon />
-                                Download
-                            </Button>
                         </Card.Body>
                     </Card>
                 </div>
@@ -300,6 +398,7 @@ export default function Dashboard() {
             <MyVerticallyCenteredModal
                 show={modalShow}
                 onHide={() => setModalShow(false)}
+                merchantDetail={merchantDetail}
             />
         </>
     )

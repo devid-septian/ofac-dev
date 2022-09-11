@@ -109,6 +109,13 @@ export const apiSlice = createApi({
                 body: requestBody,
             }),
         }),
+        getDataMerchant: builder.mutation({
+            query: (requestBody) => ({
+                url: '/data/searchData',
+                method: 'POST',
+                body: requestBody,
+            }),
+        }),
     }),
 })
 
@@ -127,4 +134,5 @@ export const {
     useUploadFileMutation,
     useCheckUploadProcessMutation,
     useGetFilesMutation,
+    useGetDataMerchantMutation,
 } = apiSlice
