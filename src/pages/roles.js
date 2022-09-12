@@ -41,7 +41,6 @@ export default function Dashboard() {
     }
     const modalHandler = (user) => {
         if (user) {
-            console.log(user)
             setIsEdit(true)
             setRoleNameData(user.role_name)
             setRoleStatusData(user.status)
@@ -71,7 +70,6 @@ export default function Dashboard() {
                   role_name: roleNameData,
                   user_token: user.User.user_token,
               }
-        console.log(dataRequest)
         const result = isEdit
             ? await updateRole(dataRequest)
             : await addRole(dataRequest)

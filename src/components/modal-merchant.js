@@ -3,7 +3,6 @@ import { Modal, Container, Row, Col, Accordion } from 'react-bootstrap'
 
 const MyVerticallyCenteredModal = (props) => {
     const { merchantDetail } = props
-    console.log(merchantDetail)
     return (
         <Modal
             {...props}

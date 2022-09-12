@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import Header from '../components/header'
 import SideMenu from '../components/side-menu'
-import Pagination from '../components/pagination'
 import {
     Button,
     Card,
@@ -12,6 +11,7 @@ import {
     Tabs,
     Table,
     Spinner,
+    Pagination,
 } from 'react-bootstrap'
 import { useSelector } from 'react-redux'
 import { getUserState } from '../redux/services/userSlice'
@@ -329,7 +329,39 @@ export default function Dashboard() {
                                             ))}
                                         </tbody>
                                     </Table>
-                                    <Pagination />
+                                    <div className="d-flex justify-content-center pt-3">
+                                        <Pagination>
+                                            <Pagination.First />
+                                            <Pagination.Prev />
+                                            <Pagination.Item>
+                                                {1}
+                                            </Pagination.Item>
+                                            <Pagination.Ellipsis />
+
+                                            <Pagination.Item>
+                                                {10}
+                                            </Pagination.Item>
+                                            <Pagination.Item>
+                                                {11}
+                                            </Pagination.Item>
+                                            <Pagination.Item active>
+                                                {12}
+                                            </Pagination.Item>
+                                            <Pagination.Item>
+                                                {13}
+                                            </Pagination.Item>
+                                            <Pagination.Item disabled>
+                                                {14}
+                                            </Pagination.Item>
+
+                                            <Pagination.Ellipsis />
+                                            <Pagination.Item>
+                                                {20}
+                                            </Pagination.Item>
+                                            <Pagination.Next />
+                                            <Pagination.Last />
+                                        </Pagination>
+                                    </div>
                                 </Tab>
                                 <Tab
                                     eventKey="consolidated"
@@ -391,7 +423,39 @@ export default function Dashboard() {
                                             )}
                                         </tbody>
                                     </Table>
-                                    <Pagination />
+                                    <div className="d-flex justify-content-center pt-3">
+                                        <Pagination>
+                                            <Pagination.First />
+                                            <Pagination.Prev />
+                                            <Pagination.Item>
+                                                {1}
+                                            </Pagination.Item>
+                                            <Pagination.Ellipsis />
+
+                                            <Pagination.Item>
+                                                {10}
+                                            </Pagination.Item>
+                                            <Pagination.Item>
+                                                {11}
+                                            </Pagination.Item>
+                                            <Pagination.Item active>
+                                                {12}
+                                            </Pagination.Item>
+                                            <Pagination.Item>
+                                                {13}
+                                            </Pagination.Item>
+                                            <Pagination.Item disabled>
+                                                {14}
+                                            </Pagination.Item>
+
+                                            <Pagination.Ellipsis />
+                                            <Pagination.Item>
+                                                {20}
+                                            </Pagination.Item>
+                                            <Pagination.Next />
+                                            <Pagination.Last />
+                                        </Pagination>
+                                    </div>
                                 </Tab>
                             </Tabs>
                         </Card.Body>
