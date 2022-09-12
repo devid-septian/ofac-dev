@@ -25,16 +25,21 @@ import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
+import { noop } from 'lodash'
+import { DOTS, getPagination } from '../hooks/pagination'
 
 export default function Dashboard() {
     const MySwal = withReactContent(Swal)
     const [getDataMerchant, { isLoading }] = useGetDataMerchantMutation()
+    const [activePage, setActivePage] = useState(1)
+    const [maximumPage, setMaximumPage] = useState(1)
+    const [paginationItem, setPaginationItem] = useState([])
     const [firstName, setFirstName] = useState('')
     const [lastName, setLastName] = useState('')
     const [idNumber, setIdNumber] = useState('')
     const [dob, setDob] = useState('')
-    const [sdnData, setSdnData] = useState([])
-    const [consolidateData, setConsolidateData] = useState([])
+    const [tableData, setSdnData] = useState([])
+    const [activeTab, setActiveTab] = useState('cdn')
     const [merchantDetail, setMerchantDetail] = useState({
         pob: [],
         nationality: [],
@@ -69,6 +74,11 @@ export default function Dashboard() {
         getListDataMerchant()
     }, [])
 
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    useEffect(() => {
+        getListDataMerchant()
+    }, [activeTab])
+
     const getListDataMerchant = async () => {
         let dataDob = ''
         if (dob.length !== 0) {
@@ -99,12 +109,25 @@ export default function Dashboard() {
                 id_number: idNumber,
                 dob: dataDob,
                 limit: 10,
-                offset: 1,
-                user_token: 'c2FyZXF1ZXN0ZXIxODJmYTM1OTA2M3lWc2wwM1MzOWg=',
+                offset: activePage,
+                user_token: user.User.user_token,
             }
             const listDataMerchant = await getDataMerchant(requestBody)
-            setSdnData(listDataMerchant.data.data.sdnData)
-            setConsolidateData(listDataMerchant.data.data.consalData)
+            const merchantData =
+                activeTab === 'cdn'
+                    ? listDataMerchant.data.data.sdnData
+                    : listDataMerchant.data.data.consalData
+            setSdnData(merchantData)
+            const totalPageCount =
+                activeTab === 'cdn'
+                    ? listDataMerchant.data.data.maxPageSdn
+                    : listDataMerchant.data.data.maxPageConsal
+            const paginateData = getPagination({
+                totalPageCount,
+                currentPage: activePage,
+            })
+            setMaximumPage(totalPageCount)
+            setPaginationItem(paginateData)
         } catch (error) {
             MySwal.fire({
                 icon: 'error',
@@ -133,11 +156,24 @@ export default function Dashboard() {
                 dob: '',
                 limit: 10,
                 offset: 1,
-                user_token: 'c2FyZXF1ZXN0ZXIxODJmYTM1OTA2M3lWc2wwM1MzOWg=',
+                user_token: user.User.user_token,
             }
             const listDataMerchant = await getDataMerchant(requestBody)
-            setSdnData(listDataMerchant.data.data.sdnData)
-            setConsolidateData(listDataMerchant.data.data.consalData)
+            const merchantData =
+                activeTab === 'cdn'
+                    ? listDataMerchant.data.data.sdnData
+                    : listDataMerchant.data.data.consalData
+            setSdnData(merchantData)
+            const totalPageCount =
+                activeTab === 'cdn'
+                    ? listDataMerchant.data.data.maxPageSdn
+                    : listDataMerchant.data.data.maxPageConsal
+            const paginateData = getPagination({
+                totalPageCount,
+                currentPage: activePage,
+            })
+            setMaximumPage(totalPageCount)
+            setPaginationItem(paginateData)
         } catch (error) {
             MySwal.fire({
                 icon: 'error',
@@ -153,6 +189,94 @@ export default function Dashboard() {
         setModalShow(true)
         setMerchantDetail(data)
     }
+
+    const pageHandler = (page) => {
+        setActivePage(page)
+        getListDataMerchant()
+    }
+
+    const tabChangeHandler = (data) => {
+        if (data !== activeTab) {
+            setActiveTab(data)
+        }
+    }
+
+    const renderTableData = (
+        <>
+            <Table striped>
+                <thead>
+                    <tr>
+                        <td>First Name</td>
+                        <td>Last Name</td>
+                        <td>Date of Birth</td>
+                        <td>ID Number</td>
+                        <td>Action</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    {isLoading ? (
+                        <tr>
+                            <td colSpan={5}>
+                                <div className="d-flex justify-content-center pt-3">
+                                    <Spinner
+                                        animation="border"
+                                        variant="light"
+                                    />
+                                </div>
+                            </td>
+                        </tr>
+                    ) : tableData.length === 0 ? (
+                        <tr>
+                            <td colSpan={5}>No Data Found</td>
+                        </tr>
+                    ) : (
+                        tableData.map((data, index) => (
+                            <tr key={index}>
+                                <td>{data.header.first_name}</td>
+                                <td>{data.header.last_name}</td>
+                                <td>{data.header.dob}</td>
+                                <td>{data.header.id_number}</td>
+                                <td>
+                                    <Button
+                                        variant="primary2"
+                                        onClick={() => viewHandler(data)}
+                                    >
+                                        <VisibilityOutlinedIcon />
+                                    </Button>
+                                </td>
+                            </tr>
+                        ))
+                    )}
+                </tbody>
+            </Table>
+            <div className="d-flex justify-content-center pt-3">
+                {isLoading ? (
+                    <Spinner animation="border" variant="light" />
+                ) : (
+                    <Pagination>
+                        {paginationItem.map((page) => {
+                            if (page === DOTS) {
+                                return <Pagination.Ellipsis key={page} />
+                            }
+                            return (
+                                <Pagination.Item
+                                    key={page}
+                                    active={activePage === page}
+                                    onClick={
+                                        activePage === page
+                                            ? noop
+                                            : () => pageHandler(page)
+                                    }
+                                >
+                                    {page}
+                                </Pagination.Item>
+                            )
+                        })}
+                    </Pagination>
+                )}
+            </div>
+        </>
+    )
 
     return (
         <>
@@ -268,194 +392,27 @@ export default function Dashboard() {
                         </Card.Body>
                     </Card>
                     <Card className="mt-5">
-                        <Card.Header>
-                            Result Data &nbsp;{' '}
-                            {isLoading && (
-                                <Spinner animation="border" variant="light" />
-                            )}
-                        </Card.Header>
+                        <Card.Header>Result Data</Card.Header>
                         <Card.Body className="data-result">
                             <Tabs
-                                defaultActiveKey="cdn"
-                                id="uncontrolled-tab-example"
                                 className="mb-3 "
+                                activeKey={activeTab}
+                                onSelect={tabChangeHandler}
+                                unmountOnExit
                             >
-                                <Tab eventKey="cdn" title="Cdn">
-                                    <Table striped>
-                                        <tbody>
-                                            <tr>
-                                                <td>First Name</td>
-                                                <td>Last Name</td>
-                                                <td>Date of Birth</td>
-                                                <td>ID Number</td>
-                                                <td>Action</td>
-                                            </tr>
-                                            {sdnData.map((dataSdn, index) => (
-                                                <tr key={index}>
-                                                    <td>
-                                                        {
-                                                            dataSdn.header
-                                                                .first_name
-                                                        }
-                                                    </td>
-                                                    <td>
-                                                        {
-                                                            dataSdn.header
-                                                                .last_name
-                                                        }
-                                                    </td>
-                                                    <td>
-                                                        {dataSdn.header.dob}
-                                                    </td>
-                                                    <td>
-                                                        {
-                                                            dataSdn.header
-                                                                .id_number
-                                                        }
-                                                    </td>
-                                                    <td>
-                                                        <Button
-                                                            variant="primary2"
-                                                            onClick={() =>
-                                                                viewHandler(
-                                                                    dataSdn
-                                                                )
-                                                            }
-                                                        >
-                                                            <VisibilityOutlinedIcon />
-                                                        </Button>
-                                                    </td>
-                                                </tr>
-                                            ))}
-                                        </tbody>
-                                    </Table>
-                                    <div className="d-flex justify-content-center pt-3">
-                                        <Pagination>
-                                            <Pagination.First />
-                                            <Pagination.Prev />
-                                            <Pagination.Item>
-                                                {1}
-                                            </Pagination.Item>
-                                            <Pagination.Ellipsis />
-
-                                            <Pagination.Item>
-                                                {10}
-                                            </Pagination.Item>
-                                            <Pagination.Item>
-                                                {11}
-                                            </Pagination.Item>
-                                            <Pagination.Item active>
-                                                {12}
-                                            </Pagination.Item>
-                                            <Pagination.Item>
-                                                {13}
-                                            </Pagination.Item>
-                                            <Pagination.Item disabled>
-                                                {14}
-                                            </Pagination.Item>
-
-                                            <Pagination.Ellipsis />
-                                            <Pagination.Item>
-                                                {20}
-                                            </Pagination.Item>
-                                            <Pagination.Next />
-                                            <Pagination.Last />
-                                        </Pagination>
-                                    </div>
+                                <Tab
+                                    eventKey="cdn"
+                                    title="Sdn"
+                                    disabled={isLoading}
+                                >
+                                    {renderTableData}
                                 </Tab>
                                 <Tab
+                                    disabled={isLoading}
                                     eventKey="consolidated"
                                     title="Consolidated"
                                 >
-                                    <Table striped>
-                                        <tbody>
-                                            <tr>
-                                                <td>First Name</td>
-                                                <td>Last Name</td>
-                                                <td>Date of Birth</td>
-                                                <td>ID Number</td>
-                                                <td>Action</td>
-                                            </tr>
-                                            {consolidateData.map(
-                                                (dataConsol, index) => (
-                                                    <tr key={index}>
-                                                        <td>
-                                                            {
-                                                                dataConsol
-                                                                    .header
-                                                                    .first_name
-                                                            }
-                                                        </td>
-                                                        <td>
-                                                            {
-                                                                dataConsol
-                                                                    .header
-                                                                    .last_name
-                                                            }
-                                                        </td>
-                                                        <td>
-                                                            {
-                                                                dataConsol
-                                                                    .header.dob
-                                                            }
-                                                        </td>
-                                                        <td>
-                                                            {
-                                                                dataConsol
-                                                                    .header
-                                                                    .id_number
-                                                            }
-                                                        </td>
-                                                        <td>
-                                                            <Button
-                                                                variant="primary2"
-                                                                onClick={() =>
-                                                                    viewHandler(
-                                                                        dataConsol
-                                                                    )
-                                                                }
-                                                            >
-                                                                <VisibilityOutlinedIcon />
-                                                            </Button>
-                                                        </td>
-                                                    </tr>
-                                                )
-                                            )}
-                                        </tbody>
-                                    </Table>
-                                    <div className="d-flex justify-content-center pt-3">
-                                        <Pagination>
-                                            <Pagination.First />
-                                            <Pagination.Prev />
-                                            <Pagination.Item>
-                                                {1}
-                                            </Pagination.Item>
-                                            <Pagination.Ellipsis />
-
-                                            <Pagination.Item>
-                                                {10}
-                                            </Pagination.Item>
-                                            <Pagination.Item>
-                                                {11}
-                                            </Pagination.Item>
-                                            <Pagination.Item active>
-                                                {12}
-                                            </Pagination.Item>
-                                            <Pagination.Item>
-                                                {13}
-                                            </Pagination.Item>
-                                            <Pagination.Item disabled>
-                                                {14}
-                                            </Pagination.Item>
-
-                                            <Pagination.Ellipsis />
-                                            <Pagination.Item>
-                                                {20}
-                                            </Pagination.Item>
-                                            <Pagination.Next />
-                                            <Pagination.Last />
-                                        </Pagination>
-                                    </div>
+                                    {renderTableData}
                                 </Tab>
                             </Tabs>
                         </Card.Body>
@@ -465,7 +422,7 @@ export default function Dashboard() {
             <MyVerticallyCenteredModal
                 show={modalShow}
                 onHide={() => setModalShow(false)}
-                merchantDetail={merchantDetail}
+                merchantdetail={merchantDetail}
             />
         </>
     )

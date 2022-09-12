@@ -2,7 +2,7 @@ import React from 'react'
 import { Modal, Container, Row, Col, Accordion } from 'react-bootstrap'
 
 const MyVerticallyCenteredModal = (props) => {
-    const { merchantDetail } = props
+    const { merchantdetail } = props
     return (
         <Modal
             {...props}
@@ -21,21 +21,21 @@ const MyVerticallyCenteredModal = (props) => {
                         <Col xs={6}>
                             <div className="detail-box">
                                 <label>ID Number:</label>
-                                <p>{merchantDetail.header.id_number}</p>
+                                <p>{merchantdetail.header.id_number}</p>
                             </div>
                             <div className="detail-box">
                                 <label>First Name:</label>
-                                <p>{merchantDetail.header.first_name}</p>
+                                <p>{merchantdetail.header.first_name}</p>
                             </div>
                         </Col>
                         <Col xs={6}>
                             <div className="detail-box">
                                 <label>Last Name:</label>
-                                <p>{merchantDetail.header.last_name}</p>
+                                <p>{merchantdetail.header.last_name}</p>
                             </div>
                             <div className="detail-box">
                                 <label>Date of Birth:</label>
-                                <p>{merchantDetail.header.dob}</p>
+                                <p>{merchantdetail.header.dob}</p>
                             </div>
                         </Col>
                     </Row>
@@ -47,8 +47,8 @@ const MyVerticallyCenteredModal = (props) => {
                         <Accordion.Item eventKey="0">
                             <Accordion.Header>Name Info</Accordion.Header>
                             <Accordion.Body>
-                                {merchantDetail.aka &&
-                                    merchantDetail.aka.map((data, index) => (
+                                {merchantdetail.aka &&
+                                    merchantdetail.aka.map((data, index) => (
                                         <>
                                             <Row key={index}>
                                                 <Col xs={6}>
@@ -84,8 +84,8 @@ const MyVerticallyCenteredModal = (props) => {
                         <Accordion.Item eventKey="1">
                             <Accordion.Header>Address Info</Accordion.Header>
                             <Accordion.Body>
-                                {merchantDetail.addrees &&
-                                    merchantDetail.addrees.map(
+                                {merchantdetail.addrees &&
+                                    merchantdetail.addrees.map(
                                         (data, index) => (
                                             <>
                                                 <Row key={index}>
@@ -179,8 +179,8 @@ const MyVerticallyCenteredModal = (props) => {
                                 Citizenship Info
                             </Accordion.Header>
                             <Accordion.Body>
-                                {merchantDetail.citizenship &&
-                                    merchantDetail.citizenship.map(
+                                {merchantdetail.citizenship &&
+                                    merchantdetail.citizenship.map(
                                         (data, index) => (
                                             <>
                                                 <Row key={index}>
@@ -214,8 +214,8 @@ const MyVerticallyCenteredModal = (props) => {
                                 Nationality Info
                             </Accordion.Header>
                             <Accordion.Body>
-                                {merchantDetail.nationality &&
-                                    merchantDetail.nationality.map(
+                                {merchantdetail.nationality &&
+                                    merchantdetail.nationality.map(
                                         (data, index) => (
                                             <>
                                                 <Row key={index}>
@@ -249,8 +249,8 @@ const MyVerticallyCenteredModal = (props) => {
                                 Place of Birth Info
                             </Accordion.Header>
                             <Accordion.Body>
-                                {merchantDetail.pob &&
-                                    merchantDetail.pob.map((data, index) => (
+                                {merchantdetail.pob &&
+                                    merchantdetail.pob.map((data, index) => (
                                         <>
                                             <Row key={index}>
                                                 <Col xs={6}>
@@ -276,8 +276,8 @@ const MyVerticallyCenteredModal = (props) => {
                                 Place of Birth Info
                             </Accordion.Header>
                             <Accordion.Body>
-                                {merchantDetail.pob &&
-                                    merchantDetail.pob.map((data, index) => (
+                                {merchantdetail.pob &&
+                                    merchantdetail.pob.map((data, index) => (
                                         <>
                                             <Row key={index}>
                                                 <Col xs={6}>
@@ -303,8 +303,8 @@ const MyVerticallyCenteredModal = (props) => {
                                 Date of Birth Info
                             </Accordion.Header>
                             <Accordion.Body>
-                                {merchantDetail.dob &&
-                                    merchantDetail.dob.map((data, index) => (
+                                {merchantdetail.dob &&
+                                    merchantdetail.dob.map((data, index) => (
                                         <>
                                             <Row key={index}>
                                                 <Col xs={6}>
@@ -328,8 +328,8 @@ const MyVerticallyCenteredModal = (props) => {
                         <Accordion.Item eventKey="7">
                             <Accordion.Header>ID Number Info</Accordion.Header>
                             <Accordion.Body>
-                                {merchantDetail.dob &&
-                                    merchantDetail.dob.map((data, index) => (
+                                {merchantdetail.dob &&
+                                    merchantdetail.dob.map((data, index) => (
                                         <>
                                             <Row key={index}>
                                                 <Col xs={6}>
@@ -363,8 +363,8 @@ const MyVerticallyCenteredModal = (props) => {
                         <Accordion.Item eventKey="6">
                             <Accordion.Header>Program Info</Accordion.Header>
                             <Accordion.Body>
-                                {merchantDetail.program &&
-                                    merchantDetail.program.map(
+                                {merchantdetail.program &&
+                                    merchantdetail.program.map(
                                         (data, index) => (
                                             <>
                                                 <Row key={index}>
