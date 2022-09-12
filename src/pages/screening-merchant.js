@@ -23,8 +23,11 @@ import { useGetDataMerchantMutation } from '../redux/services/apiSlice'
 import MyVerticallyCenteredModal from '../components/modal-merchant'
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
+import Swal from 'sweetalert2'
+import withReactContent from 'sweetalert2-react-content'
 
 export default function Dashboard() {
+    const MySwal = withReactContent(Swal)
     const [getDataMerchant, { isLoading }] = useGetDataMerchantMutation()
     const [firstName, setFirstName] = useState('')
     const [lastName, setLastName] = useState('')
