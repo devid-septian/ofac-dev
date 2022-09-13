@@ -79,7 +79,7 @@ export default function Dashboard() {
             user_name: '',
             user_full_name: '',
             role_id: 1,
-            status: '',
+            status: 'active',
             user_organization: '',
             user_token: user.User.user_token,
         }
@@ -202,28 +202,32 @@ export default function Dashboard() {
                     </Modal.Header>
                     <Modal.Body>
                         <Container>
-                            <Row>
-                                <Col>
-                                    <Form.Label>
-                                        User Name <span>*</span>
-                                    </Form.Label>
-                                </Col>
-                                <Col>
-                                    <Form.Group
-                                        className="mb-3 input-half"
-                                        controlId="dataForm.ControlInputAccount"
-                                    >
-                                        <Form.Control
-                                            type="text"
-                                            placeholder="User Name"
-                                            value={userNameData}
-                                            onChange={(e) =>
-                                                setUserNameData(e.target.value)
-                                            }
-                                        />
-                                    </Form.Group>
-                                </Col>
-                            </Row>
+                            {!isEdit && (
+                                <Row>
+                                    <Col>
+                                        <Form.Label>
+                                            User Name <span>*</span>
+                                        </Form.Label>
+                                    </Col>
+                                    <Col>
+                                        <Form.Group
+                                            className="mb-3 input-half"
+                                            controlId="dataForm.ControlInputAccount"
+                                        >
+                                            <Form.Control
+                                                type="text"
+                                                placeholder="User Name"
+                                                value={userNameData}
+                                                onChange={(e) =>
+                                                    setUserNameData(
+                                                        e.target.value
+                                                    )
+                                                }
+                                            />
+                                        </Form.Group>
+                                    </Col>
+                                </Row>
+                            )}
                             <Row>
                                 <Col>
                                     <Form.Label>
@@ -248,29 +252,32 @@ export default function Dashboard() {
                                     </Form.Group>
                                 </Col>
                             </Row>
-
-                            <Row>
-                                <Col>
-                                    <Form.Label>
-                                        Password <span>*</span>
-                                    </Form.Label>
-                                </Col>
-                                <Col>
-                                    <Form.Group
-                                        className="mb-3 input-half"
-                                        controlId="dataForm.ControlInputAccount"
-                                    >
-                                        <Form.Control
-                                            type="password"
-                                            placeholder="Password"
-                                            value={passwordData}
-                                            onChange={(e) =>
-                                                setPasswordData(e.target.value)
-                                            }
-                                        />
-                                    </Form.Group>
-                                </Col>
-                            </Row>
+                            {!isEdit && (
+                                <Row>
+                                    <Col>
+                                        <Form.Label>
+                                            Password <span>*</span>
+                                        </Form.Label>
+                                    </Col>
+                                    <Col>
+                                        <Form.Group
+                                            className="mb-3 input-half"
+                                            controlId="dataForm.ControlInputAccount"
+                                        >
+                                            <Form.Control
+                                                type="password"
+                                                placeholder="Password"
+                                                value={passwordData}
+                                                onChange={(e) =>
+                                                    setPasswordData(
+                                                        e.target.value
+                                                    )
+                                                }
+                                            />
+                                        </Form.Group>
+                                    </Col>
+                                </Row>
+                            )}
 
                             <Row>
                                 <Col>
