@@ -63,6 +63,11 @@ export default function Header({ toggleClass }) {
                                 Roles
                             </Dropdown.Item>
                             <Dropdown.Item
+                                onClick={() => Router.push('/privilege')}
+                            >
+                                Privilege
+                            </Dropdown.Item>
+                            <Dropdown.Item
                                 onClick={() => Router.push('/system-parameter')}
                             >
                                 System Parameter
