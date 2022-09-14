@@ -48,6 +48,11 @@ export default function Header({ toggleClass }) {
 
                         <Dropdown.Menu align="end">
                             <Dropdown.Item
+                                onClick={() => Router.push('/change-password')}
+                            >
+                                Change Password
+                            </Dropdown.Item>
+                            <Dropdown.Item
                                 onClick={() => Router.push('/users')}
                             >
                                 Users

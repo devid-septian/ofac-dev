@@ -25,7 +25,7 @@ export default function Dashboard() {
     const [roleIdData, setRoleIdData] = useState('')
     const [roleStatusData, setRoleStatusData] = useState('')
     const [isEdit, setIsEdit] = useState(false)
-    const [getRole] = useGetRoleMutation()
+    const [getRole, { isLoading }] = useGetRoleMutation()
     const [addRole, { isLoadingAdd }] = useAddRoleMutation()
     const [updateRole, { isLoadingUpdate }] = useUpdateRoleMutation()
     const [deleteRole, { isLoadingDelete }] = useDeleteRoleMutation()
@@ -211,40 +211,55 @@ export default function Dashboard() {
                                             </Button>
                                         </td>
                                     </tr>
-                                    {listRoles.map(
-                                        (role) =>
-                                            role.status === 'active' && (
-                                                <tr key={role.role_id}>
-                                                    <td>{role.role_name}</td>
-                                                    <td>
-                                                        <Button
-                                                            variant="primary2"
-                                                            onClick={() =>
-                                                                modalHandler(
-                                                                    role
-                                                                )
-                                                            }
-                                                        >
-                                                            <EditIcon />
-                                                        </Button>
-                                                        &nbsp;
-                                                        <Button
-                                                            variant="danger"
-                                                            onClick={() =>
-                                                                deleteHandler(
-                                                                    role
-                                                                )
-                                                            }
-                                                        >
-                                                            <DeleteIcon
-                                                                style={{
-                                                                    color: 'white',
-                                                                }}
-                                                            />
-                                                        </Button>
-                                                    </td>
-                                                </tr>
-                                            )
+                                    {isLoading ? (
+                                        <tr>
+                                            <td colSpan={5}>
+                                                <div className="d-flex justify-content-center pt-3">
+                                                    <Spinner
+                                                        animation="border"
+                                                        variant="light"
+                                                    />
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    ) : (
+                                        listRoles.map(
+                                            (role) =>
+                                                role.status === 'active' && (
+                                                    <tr key={role.role_id}>
+                                                        <td>
+                                                            {role.role_name}
+                                                        </td>
+                                                        <td>
+                                                            <Button
+                                                                variant="primary2"
+                                                                onClick={() =>
+                                                                    modalHandler(
+                                                                        role
+                                                                    )
+                                                                }
+                                                            >
+                                                                <EditIcon />
+                                                            </Button>
+                                                            &nbsp;
+                                                            <Button
+                                                                variant="danger"
+                                                                onClick={() =>
+                                                                    deleteHandler(
+                                                                        role
+                                                                    )
+                                                                }
+                                                            >
+                                                                <DeleteIcon
+                                                                    style={{
+                                                                        color: 'white',
+                                                                    }}
+                                                                />
+                                                            </Button>
+                                                        </td>
+                                                    </tr>
+                                                )
+                                        )
                                     )}
                                 </tbody>
                             </Table>

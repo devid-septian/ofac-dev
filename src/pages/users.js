@@ -44,7 +44,7 @@ export default function Dashboard() {
     const [roleStatusData, setRoleStatusData] = useState('')
     const [isEdit, setIsEdit] = useState(false)
     const [getRole] = useGetRoleMutation()
-    const [getUser] = useGetUserMutation()
+    const [getUser, { isLoading }] = useGetUserMutation()
     const [addUser, { isLoadingAdd }] = useAddUserMutation()
     const [updateUser, { isLoadingUpdate }] = useUpdateUserMutation()
     const [deleteUser, { isLoadingDelete }] = useDeleteUserMutation()
@@ -386,39 +386,57 @@ export default function Dashboard() {
                                             </Button>
                                         </td>
                                     </tr>
-                                    {listUsers.map((user) => (
-                                        <tr key={user.User.user_id}>
-                                            <td>{user.User.user_full_name}</td>
-                                            <td>{user.User.status}</td>
-                                            <td>{user.Role.role_name}</td>
-                                            <td>
-                                                {user.User.user_organization}
-                                            </td>
-                                            <td>
-                                                <Button
-                                                    variant="primary2"
-                                                    onClick={() =>
-                                                        modalHandler(user)
-                                                    }
-                                                >
-                                                    <EditIcon />
-                                                </Button>
-                                                &nbsp;
-                                                <Button
-                                                    variant="danger"
-                                                    onClick={() =>
-                                                        deleteHandler(user)
-                                                    }
-                                                >
-                                                    <DeleteIcon
-                                                        style={{
-                                                            color: 'white',
-                                                        }}
+                                    {isLoading ? (
+                                        <tr>
+                                            <td colSpan={5}>
+                                                <div className="d-flex justify-content-center pt-3">
+                                                    <Spinner
+                                                        animation="border"
+                                                        variant="light"
                                                     />
-                                                </Button>
+                                                </div>
                                             </td>
                                         </tr>
-                                    ))}
+                                    ) : (
+                                        listUsers.map((user) => (
+                                            <tr key={user.User.user_id}>
+                                                <td>
+                                                    {user.User.user_full_name}
+                                                </td>
+                                                <td>{user.User.status}</td>
+                                                <td>{user.Role.role_name}</td>
+                                                <td>
+                                                    {
+                                                        user.User
+                                                            .user_organization
+                                                    }
+                                                </td>
+                                                <td>
+                                                    <Button
+                                                        variant="primary2"
+                                                        onClick={() =>
+                                                            modalHandler(user)
+                                                        }
+                                                    >
+                                                        <EditIcon />
+                                                    </Button>
+                                                    &nbsp;
+                                                    <Button
+                                                        variant="danger"
+                                                        onClick={() =>
+                                                            deleteHandler(user)
+                                                        }
+                                                    >
+                                                        <DeleteIcon
+                                                            style={{
+                                                                color: 'white',
+                                                            }}
+                                                        />
+                                                    </Button>
+                                                </td>
+                                            </tr>
+                                        ))
+                                    )}
                                 </tbody>
                             </Table>
                         </Card.Body>
