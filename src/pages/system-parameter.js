@@ -162,7 +162,7 @@ export default function Dashboard() {
                 </Modal>
                 <div className="content-wrapper filter-data">
                     <Card className="mt-5">
-                        <Card.Header>Roles Data</Card.Header>
+                        <Card.Header>System Parameter Data</Card.Header>
                         <Card.Body className="data-result">
                             <Table striped>
                                 <tbody>
