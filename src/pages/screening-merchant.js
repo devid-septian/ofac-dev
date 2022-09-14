@@ -32,7 +32,6 @@ export default function Dashboard() {
     const MySwal = withReactContent(Swal)
     const [getDataMerchant, { isLoading }] = useGetDataMerchantMutation()
     const [activePage, setActivePage] = useState(1)
-    const [maximumPage, setMaximumPage] = useState(1)
     const [paginationItem, setPaginationItem] = useState([])
     const [firstName, setFirstName] = useState('')
     const [lastName, setLastName] = useState('')
@@ -126,7 +125,6 @@ export default function Dashboard() {
                 totalPageCount,
                 currentPage: activePage,
             })
-            setMaximumPage(totalPageCount)
             setPaginationItem(paginateData)
         } catch (error) {
             MySwal.fire({
@@ -172,7 +170,6 @@ export default function Dashboard() {
                 totalPageCount,
                 currentPage: activePage,
             })
-            setMaximumPage(totalPageCount)
             setPaginationItem(paginateData)
         } catch (error) {
             MySwal.fire({

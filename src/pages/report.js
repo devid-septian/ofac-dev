@@ -1,22 +1,27 @@
-import React, { useState } from 'react'
-import Breadcrumb from 'react-bootstrap/Breadcrumb'
+import React, { useState, useEffect } from 'react'
+import { Breadcrumb, Button, Card, Form, Table, Spinner } from 'react-bootstrap'
 import Header from '../components/header'
 import SideMenu from '../components/side-menu'
-import Button from 'react-bootstrap/Button'
-import Card from 'react-bootstrap/Card'
-import Row from 'react-bootstrap/Row'
-import Col from 'react-bootstrap/Col'
-import Form from 'react-bootstrap/Form'
 import { useSelector } from 'react-redux'
 import { getUserState } from '../redux/services/userSlice'
 import Router from 'next/router'
 import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined'
 import FileDownloadIcon from '@mui/icons-material/FileDownload'
 import ReplayOutlinedIcon from '@mui/icons-material/ReplayOutlined'
-import Table from 'react-bootstrap/Table'
+import DatePicker from 'react-datepicker'
+import 'react-datepicker/dist/react-datepicker.css'
+import { useGetDataReportMutation } from '../redux/services/apiSlice'
+import Swal from 'sweetalert2'
+import withReactContent from 'sweetalert2-react-content'
+import { parsingDate } from '../utils/date'
 
 export default function Dashboard() {
+    const MySwal = withReactContent(Swal)
     const [isActive, setActive] = useState(true)
+    const [startDate, setStartDate] = useState(new Date())
+    const [endDate, setEndDate] = useState(new Date())
+    const [listReport, setListReport] = useState([])
+    const [getDataReport, { isLoading }] = useGetDataReportMutation()
 
     const toggleClass = () => {
         setActive(!isActive)
@@ -25,6 +30,34 @@ export default function Dashboard() {
     if (!user) {
         Router.push('/')
         return
+    }
+
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    useEffect(() => {
+        getListReport()
+    }, [])
+
+    const getListReport = async () => {
+        try {
+            const parsingStartDate = parsingDate(startDate)
+            const parsingEndDate = parsingDate(endDate)
+            const requestBody = {
+                start_date: parsingStartDate,
+                end_date: parsingEndDate,
+                user_token: user.User.user_token,
+            }
+            const listDataReport = await getDataReport(requestBody)
+            setListReport(listDataReport.data.data)
+        } catch (error) {
+            console.log(error)
+            MySwal.fire({
+                icon: 'error',
+                title: 'Failed',
+                text: 'Failed to Get List Data Report',
+                showConfirmButton: false,
+                timer: 1500,
+            })
+        }
     }
     return (
         <>
@@ -49,7 +82,23 @@ export default function Dashboard() {
                                         className=""
                                         controlId="dataForm.ControlInputAccount"
                                     >
-                                        <Form.Control type="text" />
+                                        <DatePicker
+                                            selected={startDate}
+                                            onChange={(date) => {
+                                                setStartDate(date)
+                                            }}
+                                            className="form-control"
+                                            customInput={
+                                                <input
+                                                    type="text"
+                                                    id="validationCustom01"
+                                                />
+                                            }
+                                            dateFormat="dd-MM-yyyy"
+                                            showYearDropdown
+                                            yearDropdownItemNumber={70}
+                                            scrollableYearDropdown
+                                        />
                                     </Form.Group>
                                 </div>
                                 <div className="form-date">
@@ -60,7 +109,23 @@ export default function Dashboard() {
                                         className=""
                                         controlId="dataForm.ControlInputAccount"
                                     >
-                                        <Form.Control type="text" />
+                                        <DatePicker
+                                            selected={endDate}
+                                            onChange={(date) => {
+                                                setEndDate(date)
+                                            }}
+                                            className="form-control"
+                                            customInput={
+                                                <input
+                                                    type="text"
+                                                    id="validationCustom01"
+                                                />
+                                            }
+                                            dateFormat="dd-MM-yyyy"
+                                            showYearDropdown
+                                            yearDropdownItemNumber={70}
+                                            scrollableYearDropdown
+                                        />
                                     </Form.Group>
                                 </div>
                                 <div>
@@ -90,37 +155,69 @@ export default function Dashboard() {
                                         <td>End Date</td>
                                         <td>Potential Match</td>
                                         <td>Positive Match</td>
-                                        <td>Data Detail</td>
+                                        <td>Total Screened</td>
+                                        <td>Total Data</td>
                                         <td>Action</td>
                                     </tr>
-                                    <tr>
-                                        <td>Extract Date</td>
-                                        <td>Ofac List</td>
-                                        <td>Start Date</td>
-                                        <td>End Date</td>
-                                        <td>Potential Match</td>
-                                        <td>Positive Match</td>
-                                        <td>Data Detail</td>
-                                        <td>
-                                            <Button variant="success">
-                                                <FileDownloadIcon />
-                                            </Button>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>Extract Date</td>
-                                        <td>Ofac List</td>
-                                        <td>Start Date</td>
-                                        <td>End Date</td>
-                                        <td>Potential Match</td>
-                                        <td>Positive Match</td>
-                                        <td>Data Detail</td>
-                                        <td>
-                                            <Button variant="success">
-                                                <FileDownloadIcon />
-                                            </Button>
-                                        </td>
-                                    </tr>
+                                    {isLoading ? (
+                                        <tr>
+                                            <td colSpan={5}>
+                                                <div className="d-flex justify-content-center pt-3">
+                                                    <Spinner
+                                                        animation="border"
+                                                        variant="light"
+                                                    />
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    ) : listReport.length === 0 ? (
+                                        <tr>
+                                            <td colSpan={5}>No Data Found</td>
+                                        </tr>
+                                    ) : (
+                                        listReport.map((data, index) => (
+                                            <tr key={index}>
+                                                <td>
+                                                    {
+                                                        data.extract_date.split(
+                                                            ' '
+                                                        )[0]
+                                                    }
+                                                </td>
+                                                <td>
+                                                    {data.ofac_list_screened}
+                                                </td>
+                                                <td>
+                                                    {
+                                                        data.start_date.split(
+                                                            ' '
+                                                        )[0]
+                                                    }
+                                                </td>
+                                                <td>
+                                                    {
+                                                        data.end_date.split(
+                                                            ' '
+                                                        )[0]
+                                                    }
+                                                </td>
+                                                <td>{data.potential}</td>
+                                                <td>{data.positive}</td>
+                                                <td>{data.total_screened}</td>
+                                                <td>{data.total_data}</td>
+                                                <td>
+                                                    <Button
+                                                        variant="primary2"
+                                                        onClick={() =>
+                                                            viewHandler(data)
+                                                        }
+                                                    >
+                                                        <FileDownloadIcon />
+                                                    </Button>
+                                                </td>
+                                            </tr>
+                                        ))
+                                    )}
                                 </tbody>
                             </Table>
                         </Card.Body>

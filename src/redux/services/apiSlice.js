@@ -116,6 +116,13 @@ export const apiSlice = createApi({
                 body: requestBody,
             }),
         }),
+        getDataReport: builder.mutation({
+            query: (requestBody) => ({
+                url: '/data/getReportList',
+                method: 'POST',
+                body: requestBody,
+            }),
+        }),
     }),
 })
 
@@ -135,4 +142,5 @@ export const {
     useCheckUploadProcessMutation,
     useGetFilesMutation,
     useGetDataMerchantMutation,
+    useGetDataReportMutation,
 } = apiSlice
