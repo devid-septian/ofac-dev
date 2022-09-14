@@ -123,6 +123,20 @@ export const apiSlice = createApi({
                 body: requestBody,
             }),
         }),
+        getSystemParameter: builder.mutation({
+            query: (requestBody) => ({
+                url: '/system/getSystemParameter',
+                method: 'POST',
+                body: requestBody,
+            }),
+        }),
+        updateSystemParameter: builder.mutation({
+            query: (requestBody) => ({
+                url: '/system/updateSystemParameter',
+                method: 'POST',
+                body: requestBody,
+            }),
+        }),
     }),
 })
 
@@ -143,4 +157,6 @@ export const {
     useGetFilesMutation,
     useGetDataMerchantMutation,
     useGetDataReportMutation,
+    useGetSystemParameterMutation,
+    useUpdateSystemParameterMutation,
 } = apiSlice
