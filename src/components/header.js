@@ -58,6 +58,11 @@ export default function Header({ toggleClass }) {
                                 Users
                             </Dropdown.Item>
                             <Dropdown.Item
+                                onClick={() => Router.push('/profile')}
+                            >
+                                Profile
+                            </Dropdown.Item>
+                            <Dropdown.Item
                                 onClick={() => Router.push('/roles')}
                             >
                                 Roles
