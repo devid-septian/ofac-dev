@@ -138,7 +138,7 @@ export default function Dashboard() {
         getPrivilegeList()
     }, [])
 
-    if (!user || !user.Privilege.includes('Master Privilege')) {
+    if (!user) {
         Router.push('/')
         return
     }

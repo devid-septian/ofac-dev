@@ -63,7 +63,7 @@ export default function Dashboard() {
     }
     const user = useSelector(getUserState)
 
-    if (!user || !user.Privilege.includes('Searching')) {
+    if (!user) {
         Router.push('/')
         return
     }
@@ -222,11 +222,12 @@ export default function Dashboard() {
                                 </div>
                             </td>
                         </tr>
-                    ) : tableData.length === 0 ? (
+                    ) : tableData && tableData.length === 0 ? (
                         <tr>
                             <td colSpan={5}>No Data Found</td>
                         </tr>
                     ) : (
+                        tableData &&
                         tableData.map((data, index) => (
                             <tr key={index}>
                                 <td>{data.header.first_name}</td>

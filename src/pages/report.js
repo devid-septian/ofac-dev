@@ -10,10 +10,7 @@ import FileDownloadIcon from '@mui/icons-material/FileDownload'
 import ReplayOutlinedIcon from '@mui/icons-material/ReplayOutlined'
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
-import {
-    useGetDataReportMutation,
-    useGetDownloadReportMutation,
-} from '../redux/services/apiSlice'
+import { useGetDataReportMutation } from '../redux/services/apiSlice'
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
 import { parsingDate } from '../utils/date'
@@ -25,13 +22,12 @@ export default function Dashboard() {
     const [endDate, setEndDate] = useState(new Date())
     const [listReport, setListReport] = useState([])
     const [getDataReport, { isLoading }] = useGetDataReportMutation()
-    const [getDownloadReport] = useGetDownloadReportMutation()
 
     const toggleClass = () => {
         setActive(!isActive)
     }
     const user = useSelector(getUserState)
-    if (!user || !user.Privilege.includes('Report')) {
+    if (!user) {
         Router.push('/')
         return
     }
@@ -152,8 +148,12 @@ export default function Dashboard() {
                     </Card>
                     <Card className="mt-5">
                         <Card.Header>
-                            Rerport Table
-                            <Button variant="success" size="sm">
+                            Report Table
+                            <Button
+                                variant="success"
+                                size="sm"
+                                onClick={getListReport}
+                            >
                                 <ReplayOutlinedIcon />
                                 Process
                             </Button>
@@ -183,11 +183,13 @@ export default function Dashboard() {
                                                 </div>
                                             </td>
                                         </tr>
-                                    ) : listReport.length === 0 ? (
+                                    ) : listReport &&
+                                      listReport.length === 0 ? (
                                         <tr>
                                             <td colSpan={5}>No Data Found</td>
                                         </tr>
                                     ) : (
+                                        listReport &&
                                         listReport.map((data, index) => (
                                             <tr key={index}>
                                                 <td>

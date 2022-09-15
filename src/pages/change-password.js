@@ -21,7 +21,7 @@ export default function Dashboard() {
         setActive(!isActive)
     }
 
-    if (!user || !user.Privilege.includes('Change Password')) {
+    if (!user) {
         Router.push('/')
         return
     }

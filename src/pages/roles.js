@@ -129,7 +129,7 @@ export default function Dashboard() {
         getRoleList()
     }, [])
 
-    if (!user || !user.Privilege.includes('Master Role')) {
+    if (!user) {
         Router.push('/')
         return
     }

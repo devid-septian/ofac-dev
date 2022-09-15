@@ -43,7 +43,7 @@ export default function Dashboard() {
         getSystemParameterList()
     }, [])
 
-    if (!user || !user.Privilege.includes('Master System Parameter')) {
+    if (!user) {
         Router.push('/')
         return
     }

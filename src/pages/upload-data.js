@@ -52,7 +52,7 @@ export default function Dashboard() {
             }
         })
     }
-    if (!user || !user.Privilege.includes('Upload Data')) {
+    if (!user) {
         Router.push('/')
         return
     }
