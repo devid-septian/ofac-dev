@@ -10,7 +10,10 @@ import FileDownloadIcon from '@mui/icons-material/FileDownload'
 import ReplayOutlinedIcon from '@mui/icons-material/ReplayOutlined'
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
-import { useGetDataReportMutation } from '../redux/services/apiSlice'
+import {
+    useGetDataReportMutation,
+    useGetDownloadReportMutation,
+} from '../redux/services/apiSlice'
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
 import { parsingDate } from '../utils/date'
@@ -22,6 +25,7 @@ export default function Dashboard() {
     const [endDate, setEndDate] = useState(new Date())
     const [listReport, setListReport] = useState([])
     const [getDataReport, { isLoading }] = useGetDataReportMutation()
+    const [getDownloadReport] = useGetDownloadReportMutation()
 
     const toggleClass = () => {
         setActive(!isActive)
@@ -58,6 +62,14 @@ export default function Dashboard() {
                 timer: 1500,
             })
         }
+    }
+    const downloadHandler = async (data) => {
+        const requestBody = {
+            report_id: data.report_id,
+            user_token: user.User.user_token,
+        }
+        const response = await getDownloadReport(requestBody)
+        console.log(response)
     }
     return (
         <>
@@ -129,7 +141,11 @@ export default function Dashboard() {
                                     </Form.Group>
                                 </div>
                                 <div>
-                                    <Button variant="info" size="sm">
+                                    <Button
+                                        variant="info"
+                                        size="sm"
+                                        onClick={getListReport}
+                                    >
                                         <SearchOutlinedIcon />
                                         Search
                                     </Button>
@@ -209,7 +225,9 @@ export default function Dashboard() {
                                                     <Button
                                                         variant="primary2"
                                                         onClick={() =>
-                                                            viewHandler(data)
+                                                            downloadHandler(
+                                                                data
+                                                            )
                                                         }
                                                     >
                                                         <FileDownloadIcon />
