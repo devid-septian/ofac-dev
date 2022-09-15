@@ -63,13 +63,10 @@ export default function Dashboard() {
             })
         }
     }
-    const downloadHandler = async (data) => {
-        const requestBody = {
-            report_id: data.report_id,
-            user_token: user.User.user_token,
-        }
-        const response = await getDownloadReport(requestBody)
-        console.log(response)
+    const downloadHandler = (data) => {
+        const url = `http://31.220.6.203:7789/data/getReportFile/${data.report_id}/${user.User.user_token}`
+        const newWindow = window.open(url, '_blank', 'noopener,noreferrer')
+        if (newWindow) newWindow.opener = null
     }
     return (
         <>
