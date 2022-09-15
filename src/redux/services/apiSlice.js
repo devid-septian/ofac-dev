@@ -151,6 +151,13 @@ export const apiSlice = createApi({
                 body: requestBody,
             }),
         }),
+        updatePrivilege: builder.mutation({
+            query: (requestBody) => ({
+                url: '/role/updatePrivilege',
+                method: 'POST',
+                body: requestBody,
+            }),
+        }),
     }),
 })
 
@@ -175,4 +182,5 @@ export const {
     useUpdateSystemParameterMutation,
     useGetDownloadReportMutation,
     useGetPrivilegeMutation,
+    useUpdatePrivilegeMutation,
 } = apiSlice

@@ -9,29 +9,27 @@ import DeleteIcon from '@mui/icons-material/Delete'
 import EditIcon from '@mui/icons-material/Edit'
 import {
     useGetRoleMutation,
-    useAddRoleMutation,
-    useUpdateRoleMutation,
-    useDeleteRoleMutation,
     useGetPrivilegeMutation,
+    useUpdatePrivilegeMutation,
 } from '../redux/services/apiSlice'
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
 import Table from 'react-bootstrap/Table'
+import { isEmpty } from 'lodash'
 
 export default function Dashboard() {
     const [isActive, setActive] = useState(true)
     const [showModal, setShowModal] = useState(false)
     const [listRoles, setListRoles] = useState([])
     const [listPrivilege, setListPrivilege] = useState([])
-    const [roleNameData, setRoleNameData] = useState('')
-    const [roleIdData, setRoleIdData] = useState('')
-    const [roleStatusData, setRoleStatusData] = useState('')
+    const [privilegeValue, setPrivilegeValue] = useState([])
+    const [roleIdData, setRoleIdData] = useState(0)
     const [isEdit, setIsEdit] = useState(false)
     const [getRole] = useGetRoleMutation()
     const [getPrivilege, { isLoading }] = useGetPrivilegeMutation()
-    const [addRole, { isLoadingAdd }] = useAddRoleMutation()
-    const [updateRole, { isLoadingUpdate }] = useUpdateRoleMutation()
-    const [deleteRole, { isLoadingDelete }] = useDeleteRoleMutation()
+    const [updatePrivilege, { isLoadingPrivilege }] =
+        useUpdatePrivilegeMutation()
+
     const MySwal = withReactContent(Swal)
     const dataPrivilege = [
         'Dashboard',
@@ -50,13 +48,21 @@ export default function Dashboard() {
     }
     const modalHandler = (user) => {
         if (user) {
+            if (isEmpty(...user.Privilege)) {
+                setPrivilegeValue([])
+            } else {
+                const validValue = user.Privilege.map((priv) =>
+                    priv.substring(1, priv.length - 1)
+                )
+                console.log(validValue)
+                setPrivilegeValue(validValue)
+            }
+            setRoleIdData(user.Role.role_id)
             setIsEdit(true)
-            setRoleNameData(user.role_name)
-            setRoleStatusData(user.status)
-            setRoleIdData(user.role_id)
         } else {
             setIsEdit(false)
-            setRoleNameData('')
+            setRoleIdData(0)
+            setPrivilegeValue([])
         }
         setShowModal(true)
     }
@@ -75,42 +81,52 @@ export default function Dashboard() {
     }
 
     const submitHandler = async () => {
-        const dataRequest = isEdit
-            ? {
-                  role_name: roleNameData,
-                  user_token: user.User.user_token,
-                  status: roleStatusData,
-                  role_id: roleIdData,
-              }
-            : {
-                  role_name: roleNameData,
-                  user_token: user.User.user_token,
-              }
-        const result = isEdit
-            ? await updateRole(dataRequest)
-            : await addRole(dataRequest)
-        if (result.data.success) {
-            getRoleList()
-            setShowModal(false)
+        if (roleIdData === 0) {
             MySwal.fire({
-                icon: 'success',
-                title: 'Success',
-                text: isEdit ? 'Success Edit Role' : 'Success Add Role',
+                icon: 'error',
+                title: 'Failed',
+                text: 'Please Select Role',
+                showConfirmButton: false,
+                timer: 1500,
+            })
+        } else if (privilegeValue.length === 0) {
+            MySwal.fire({
+                icon: 'error',
+                title: 'Failed',
+                text: 'Please Pick minimum 1 privilege',
                 showConfirmButton: false,
                 timer: 1500,
             })
         } else {
-            MySwal.fire({
-                icon: 'error',
-                title: 'Failed',
-                text: isEdit ? 'Failed Edit Role' : 'Failed Add Role',
-                showConfirmButton: false,
-                timer: 1500,
-            })
+            const dataRequest = {
+                menu_name: privilegeValue,
+                user_token: user.User.user_token,
+                role_id: roleIdData,
+            }
+            const result = await updatePrivilege(dataRequest)
+            if (result.data.success) {
+                getPrivilegeList()
+                setShowModal(false)
+                MySwal.fire({
+                    icon: 'success',
+                    title: 'Success',
+                    text: isEdit ? 'Success Edit Role' : 'Success Add Role',
+                    showConfirmButton: false,
+                    timer: 1500,
+                })
+            } else {
+                MySwal.fire({
+                    icon: 'error',
+                    title: 'Failed',
+                    text: isEdit ? 'Failed Edit Role' : 'Failed Add Role',
+                    showConfirmButton: false,
+                    timer: 1500,
+                })
+            }
         }
     }
 
-    const deleteHandler = async () => {
+    const deleteHandler = async (data) => {
         MySwal.fire({
             title: `Delete Privilege`,
             text: `Do you want to delete Privilege ?`,
@@ -118,9 +134,23 @@ export default function Dashboard() {
             showCancelButton: true,
             confirmButtonText: 'OK',
             showLoaderOnConfirm: true,
-            preConfirm: async () => {},
-            allowOutsideClick: () => isLoadingDelete,
+            preConfirm: async () => {
+                const dataRequest = {
+                    menu_name: [],
+                    user_token: user.User.user_token,
+                    role_id: data.Role.role_id,
+                }
+                return updatePrivilege(dataRequest)
+                    .then((response) => {
+                        return response
+                    })
+                    .catch((error) => {
+                        MySwal.showValidationMessage(`Request failed: ${error}`)
+                    })
+            },
+            allowOutsideClick: () => isLoadingPrivilege,
         }).then((result) => {
+            getPrivilegeList()
             if (result.isConfirmed) {
                 MySwal.fire({
                     icon: 'success',
@@ -141,6 +171,15 @@ export default function Dashboard() {
     if (!user) {
         Router.push('/')
         return
+    }
+    const checkHandler = (e, type) => {
+        if (e.target.checked) {
+            const newValuePrivilege = privilegeValue.concat([type])
+            setPrivilegeValue(newValuePrivilege)
+        } else {
+            const newValueFinal = privilegeValue.filter((item) => item !== type)
+            setPrivilegeValue(newValueFinal)
+        }
     }
     return (
         <>
@@ -170,12 +209,13 @@ export default function Dashboard() {
                                 controlId="dataForm.ControlInputAccount"
                             >
                                 <Form.Select
-                                    value={roleNameData}
+                                    value={roleIdData}
                                     onChange={(e) =>
-                                        setRoleNameData(e.target.value)
+                                        setRoleIdData(e.target.value)
                                     }
                                     aria-label="Select Role"
                                 >
+                                    <option value={0}>Select Role</option>
                                     {listRoles.map(
                                         (role) =>
                                             role.status === 'active' && (
@@ -198,13 +238,22 @@ export default function Dashboard() {
                                 className="mb-3 input-half"
                                 controlId="dataForm.ControlInputAccount"
                             >
-                                {dataPrivilege.map((type) => (
-                                    <Form.Check
-                                        key={type}
-                                        type="checkbox"
-                                        label={type}
-                                    />
-                                ))}
+                                {dataPrivilege.map((type) => {
+                                    return (
+                                        <Form.Check
+                                            key={type}
+                                            type="checkbox"
+                                            label={type}
+                                            onChange={(e) =>
+                                                checkHandler(e, type)
+                                            }
+                                            id={type}
+                                            checked={privilegeValue.includes(
+                                                type
+                                            )}
+                                        />
+                                    )
+                                })}
                             </Form.Group>
                         </Col>
                     </Modal.Body>
@@ -212,12 +261,16 @@ export default function Dashboard() {
                         <Button
                             variant="secondary"
                             onClick={() => setShowModal(false)}
-                            disabled={isLoadingAdd}
+                            disabled={isLoadingPrivilege}
                         >
                             Close
                         </Button>
-                        <Button variant="primary" disabled={isLoadingAdd}>
-                            {isLoadingAdd || isLoadingUpdate ? (
+                        <Button
+                            variant="primary"
+                            disabled={isLoadingPrivilege}
+                            onClick={submitHandler}
+                        >
+                            {isLoadingPrivilege ? (
                                 <Spinner animation="border" variant="light" />
                             ) : isEdit ? (
                                 'Edit Privilege'
@@ -276,7 +329,7 @@ export default function Dashboard() {
                                                                 variant="primary2"
                                                                 onClick={() =>
                                                                     modalHandler(
-                                                                        role
+                                                                        data
                                                                     )
                                                                 }
                                                             >
@@ -287,7 +340,7 @@ export default function Dashboard() {
                                                                 variant="danger"
                                                                 onClick={() =>
                                                                     deleteHandler(
-                                                                        role
+                                                                        data
                                                                     )
                                                                 }
                                                             >
