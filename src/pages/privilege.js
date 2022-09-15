@@ -12,6 +12,7 @@ import {
     useAddRoleMutation,
     useUpdateRoleMutation,
     useDeleteRoleMutation,
+    useGetPrivilegeMutation,
 } from '../redux/services/apiSlice'
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
@@ -21,11 +22,13 @@ export default function Dashboard() {
     const [isActive, setActive] = useState(true)
     const [showModal, setShowModal] = useState(false)
     const [listRoles, setListRoles] = useState([])
+    const [listPrivilege, setListPrivilege] = useState([])
     const [roleNameData, setRoleNameData] = useState('')
     const [roleIdData, setRoleIdData] = useState('')
     const [roleStatusData, setRoleStatusData] = useState('')
     const [isEdit, setIsEdit] = useState(false)
-    const [getRole, { isLoading }] = useGetRoleMutation()
+    const [getRole] = useGetRoleMutation()
+    const [getPrivilege, { isLoading }] = useGetPrivilegeMutation()
     const [addRole, { isLoadingAdd }] = useAddRoleMutation()
     const [updateRole, { isLoadingUpdate }] = useUpdateRoleMutation()
     const [deleteRole, { isLoadingDelete }] = useDeleteRoleMutation()
@@ -62,6 +65,13 @@ export default function Dashboard() {
     const getRoleList = async () => {
         const listRolesApi = await getRole({ user_token: user.User.user_token })
         setListRoles(listRolesApi.data.data)
+    }
+
+    const getPrivilegeList = async () => {
+        const listPrivilege = await getPrivilege({
+            user_token: user.User.user_token,
+        })
+        setListPrivilege(listPrivilege.data.data)
     }
 
     const submitHandler = async () => {
@@ -125,13 +135,13 @@ export default function Dashboard() {
 
     useEffect(() => {
         getRoleList()
+        getPrivilegeList()
     }, [])
 
     if (!user) {
         Router.push('/')
         return
     }
-
     return (
         <>
             <div className={`dashboard ${isActive ? 'show_menu' : null}`}>
@@ -219,7 +229,7 @@ export default function Dashboard() {
                 </Modal>
                 <div className="content-wrapper filter-data">
                     <Card className="mt-5">
-                        <Card.Header>Roles Data</Card.Header>
+                        <Card.Header>Privilege Data</Card.Header>
                         <Card.Body className="data-result">
                             <Table striped>
                                 <tbody>
@@ -231,35 +241,67 @@ export default function Dashboard() {
                                                 variant="success"
                                                 onClick={() => modalHandler()}
                                             >
-                                                Add Role
+                                                Add Privilege
                                             </Button>
                                         </td>
                                     </tr>
-                                    <tr>
-                                        <td>User</td>
-                                        <td>
-                                            Dashboard, Upload Data, Searching
-                                        </td>
-                                        <td>
-                                            <Button
-                                                variant="primary2"
-                                                onClick={() => modalHandler()}
-                                            >
-                                                <EditIcon />
-                                            </Button>
-                                            &nbsp;
-                                            <Button
-                                                variant="danger"
-                                                onClick={deleteHandler}
-                                            >
-                                                <DeleteIcon
-                                                    style={{
-                                                        color: 'white',
-                                                    }}
-                                                />
-                                            </Button>
-                                        </td>
-                                    </tr>
+                                    {isLoading ? (
+                                        <tr>
+                                            <td colSpan={5}>
+                                                <div className="d-flex justify-content-center pt-3">
+                                                    <Spinner
+                                                        animation="border"
+                                                        variant="light"
+                                                    />
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    ) : (
+                                        listPrivilege.map(
+                                            (data) =>
+                                                data.Role.status ===
+                                                    'active' && (
+                                                    <tr key={data.Role.role_id}>
+                                                        <td>
+                                                            {
+                                                                data.Role
+                                                                    .role_name
+                                                            }
+                                                        </td>
+                                                        <td>
+                                                            {data.Privilege.toString()}
+                                                        </td>
+                                                        <td>
+                                                            <Button
+                                                                variant="primary2"
+                                                                onClick={() =>
+                                                                    modalHandler(
+                                                                        role
+                                                                    )
+                                                                }
+                                                            >
+                                                                <EditIcon />
+                                                            </Button>
+                                                            &nbsp;
+                                                            <Button
+                                                                variant="danger"
+                                                                onClick={() =>
+                                                                    deleteHandler(
+                                                                        role
+                                                                    )
+                                                                }
+                                                            >
+                                                                <DeleteIcon
+                                                                    style={{
+                                                                        color: 'white',
+                                                                    }}
+                                                                />
+                                                            </Button>
+                                                        </td>
+                                                    </tr>
+                                                )
+                                        )
+                                    )}
                                 </tbody>
                             </Table>
                         </Card.Body>
