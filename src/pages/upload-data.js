@@ -1,25 +1,12 @@
 import React, { useState, useRef, useEffect } from 'react'
-import Placeholder from 'react-bootstrap/Placeholder'
-import Breadcrumb from 'react-bootstrap/Breadcrumb'
 import Header from '../components/header'
 import SideMenu from '../components/side-menu'
-import Button from 'react-bootstrap/Button'
-import Card from 'react-bootstrap/Card'
-import Row from 'react-bootstrap/Row'
-import Col from 'react-bootstrap/Col'
-import Form from 'react-bootstrap/Form'
+import { Button, Card, Row, Col, Form, Table, Spinner } from 'react-bootstrap'
 import { useSelector, useDispatch } from 'react-redux'
 import { getUserState } from '../redux/services/userSlice'
 import Router from 'next/router'
-import CheckIcon from '@mui/icons-material/Check'
-import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined'
-import FileDownloadIcon from '@mui/icons-material/FileDownload'
-import Tab from 'react-bootstrap/Tab'
-import Tabs from 'react-bootstrap/Tabs'
-import Table from 'react-bootstrap/Table'
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
-import Spinner from 'react-bootstrap/Spinner'
 import {
     useUploadFileMutation,
     useCheckUploadProcessMutation,
@@ -65,7 +52,7 @@ export default function Dashboard() {
             }
         })
     }
-    if (!user) {
+    if (!user || !user.Privilege.includes('Upload Data')) {
         Router.push('/')
         return
     }
@@ -159,8 +146,8 @@ export default function Dashboard() {
     return (
         <>
             <div className={`dashboard ${isActive ? 'show_menu' : null}`}>
-                <Header toggleClass={toggleClass} />
-                <SideMenu />
+                <Header toggleClass={toggleClass} privilege={user.Privilege} />
+                <SideMenu privilege={user.Privilege} />
                 <div className="content-wrapper filter-data">
                     <Card>
                         <Card.Header>Upload File Form</Card.Header>

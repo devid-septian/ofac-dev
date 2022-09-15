@@ -138,15 +138,15 @@ export default function Dashboard() {
         getPrivilegeList()
     }, [])
 
-    if (!user) {
+    if (!user || !user.Privilege.includes('Master Privilege')) {
         Router.push('/')
         return
     }
     return (
         <>
             <div className={`dashboard ${isActive ? 'show_menu' : null}`}>
-                <Header toggleClass={toggleClass} />
-                <SideMenu />
+                <Header toggleClass={toggleClass} privilege={user.Privilege} />
+                <SideMenu privilege={user.Privilege} />
                 <Modal
                     show={showModal}
                     onHide={() => setShowModal(false)}

@@ -4,11 +4,12 @@ import Header from '../components/header'
 import SideMenu from '../components/side-menu'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
-import { useSelector } from 'react-redux'
-import { getUserState } from '../redux/services/userSlice'
+import { useSelector, useDispatch } from 'react-redux'
+import { getUserState, setUser } from '../redux/services/userSlice'
 import Router from 'next/router'
 
 export default function Dashboard() {
+    const dispatch = useDispatch()
     const [isActive, setActive] = useState(true)
 
     const toggleClass = () => {
@@ -16,14 +17,15 @@ export default function Dashboard() {
     }
     const user = useSelector(getUserState)
     if (!user) {
+        dispatch(setUser(null))
         Router.push('/')
         return
     }
     return (
         <>
             <div className={`dashboard ${isActive ? 'show_menu' : null}`}>
-                <Header toggleClass={toggleClass} />
-                <SideMenu />
+                <Header toggleClass={toggleClass} privilege={user.Privilege} />
+                <SideMenu privilege={user.Privilege} />
                 <Breadcrumb>
                     <Breadcrumb.Item href="#">Home</Breadcrumb.Item>
                     <Breadcrumb.Item active>Dashboard</Breadcrumb.Item>

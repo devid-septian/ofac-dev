@@ -10,7 +10,7 @@ import { setUser } from '../redux/services/userSlice'
 import Router from 'next/router'
 import NotificationsIcon from '@mui/icons-material/Notifications'
 
-export default function Header({ toggleClass }) {
+export default function Header({ toggleClass, privilege }) {
     const dispatch = useDispatch()
     const logoutHandler = () => {
         dispatch(setUser(null))
@@ -47,36 +47,52 @@ export default function Header({ toggleClass }) {
                         </Dropdown.Toggle>
 
                         <Dropdown.Menu align="end">
-                            <Dropdown.Item
-                                onClick={() => Router.push('/change-password')}
-                            >
-                                Change Password
-                            </Dropdown.Item>
-                            <Dropdown.Item
-                                onClick={() => Router.push('/users')}
-                            >
-                                Users
-                            </Dropdown.Item>
+                            {privilege.includes('Change Password') && (
+                                <Dropdown.Item
+                                    onClick={() =>
+                                        Router.push('/change-password')
+                                    }
+                                >
+                                    Change Password
+                                </Dropdown.Item>
+                            )}
+                            {privilege.includes('Master User') && (
+                                <Dropdown.Item
+                                    onClick={() => Router.push('/users')}
+                                >
+                                    Users
+                                </Dropdown.Item>
+                            )}
+
                             <Dropdown.Item
                                 onClick={() => Router.push('/profile')}
                             >
                                 Profile
                             </Dropdown.Item>
-                            <Dropdown.Item
-                                onClick={() => Router.push('/roles')}
-                            >
-                                Roles
-                            </Dropdown.Item>
-                            <Dropdown.Item
-                                onClick={() => Router.push('/privilege')}
-                            >
-                                Privilege
-                            </Dropdown.Item>
-                            <Dropdown.Item
-                                onClick={() => Router.push('/system-parameter')}
-                            >
-                                System Parameter
-                            </Dropdown.Item>
+                            {privilege.includes('Master Role') && (
+                                <Dropdown.Item
+                                    onClick={() => Router.push('/roles')}
+                                >
+                                    Roles
+                                </Dropdown.Item>
+                            )}
+                            {privilege.includes('Master Privilege') && (
+                                <Dropdown.Item
+                                    onClick={() => Router.push('/privilege')}
+                                >
+                                    Privilege
+                                </Dropdown.Item>
+                            )}
+                            {privilege.includes('Master System Parameter') && (
+                                <Dropdown.Item
+                                    onClick={() =>
+                                        Router.push('/system-parameter')
+                                    }
+                                >
+                                    System Parameter
+                                </Dropdown.Item>
+                            )}
+
                             <Dropdown.Item onClick={logoutHandler}>
                                 Logout
                             </Dropdown.Item>

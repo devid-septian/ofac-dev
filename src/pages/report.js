@@ -31,7 +31,7 @@ export default function Dashboard() {
         setActive(!isActive)
     }
     const user = useSelector(getUserState)
-    if (!user) {
+    if (!user || !user.Privilege.includes('Report')) {
         Router.push('/')
         return
     }
@@ -74,8 +74,8 @@ export default function Dashboard() {
     return (
         <>
             <div className={`dashboard ${isActive ? 'show_menu' : null}`}>
-                <Header toggleClass={toggleClass} />
-                <SideMenu />
+                <Header toggleClass={toggleClass} privilege={user.Privilege} />
+                <SideMenu privilege={user.Privilege} />
                 <Breadcrumb>
                     <Breadcrumb.Item href="#">Home</Breadcrumb.Item>
                     <Breadcrumb.Item href="#">Ofac</Breadcrumb.Item>

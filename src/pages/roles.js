@@ -129,7 +129,7 @@ export default function Dashboard() {
         getRoleList()
     }, [])
 
-    if (!user) {
+    if (!user || !user.Privilege.includes('Master Role')) {
         Router.push('/')
         return
     }
@@ -137,8 +137,8 @@ export default function Dashboard() {
     return (
         <>
             <div className={`dashboard ${isActive ? 'show_menu' : null}`}>
-                <Header toggleClass={toggleClass} />
-                <SideMenu />
+                <Header toggleClass={toggleClass} privilege={user.Privilege} />
+                <SideMenu privilege={user.Privilege} />
                 <Modal
                     show={showModal}
                     onHide={() => setShowModal(false)}

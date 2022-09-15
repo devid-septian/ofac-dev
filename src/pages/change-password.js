@@ -21,7 +21,7 @@ export default function Dashboard() {
         setActive(!isActive)
     }
 
-    if (!user) {
+    if (!user || !user.Privilege.includes('Change Password')) {
         Router.push('/')
         return
     }
@@ -71,8 +71,8 @@ export default function Dashboard() {
     return (
         <>
             <div className={`dashboard ${isActive ? 'show_menu' : null}`}>
-                <Header toggleClass={toggleClass} />
-                <SideMenu />
+                <Header toggleClass={toggleClass} privilege={user.Privilege} />
+                <SideMenu privilege={user.Privilege} />
                 <div className="content-wrapper filter-data">
                     <Card>
                         <Card.Header>Change Password</Card.Header>

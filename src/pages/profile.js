@@ -20,13 +20,11 @@ export default function Dashboard() {
         return
     }
 
-    console.log(user)
-
     return (
         <>
             <div className={`dashboard ${isActive ? 'show_menu' : null}`}>
-                <Header toggleClass={toggleClass} />
-                <SideMenu />
+                <Header toggleClass={toggleClass} privilege={user.Privilege} />
+                <SideMenu privilege={user.Privilege} />
                 <div className="content-wrapper filter-data">
                     <Card className="mt-5">
                         <Card.Header>Profile Data</Card.Header>
