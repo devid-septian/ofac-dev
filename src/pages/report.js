@@ -14,6 +14,7 @@ import { useGetDataReportMutation } from '../redux/services/apiSlice'
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
 import { parsingDate } from '../utils/date'
+import { URL_API } from '../config'
 
 export default function Dashboard() {
     const MySwal = withReactContent(Swal)
@@ -60,7 +61,7 @@ export default function Dashboard() {
         }
     }
     const downloadHandler = (data) => {
-        const url = `http://31.220.6.203:7789/data/getReportFile/${data.report_id}/${user.User.user_token}`
+        const url = `${URL_API}/data/getReportFile/${data.report_id}/${user.User.user_token}`
         const newWindow = window.open(url, '_blank', 'noopener,noreferrer')
         if (newWindow) newWindow.opener = null
     }

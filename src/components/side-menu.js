@@ -4,6 +4,9 @@ import Accordion from 'react-bootstrap/Accordion'
 import NextLink from 'next/link'
 
 export default function SideMenu({ privilege }) {
+    const validPrivilege = privilege.map((priv) =>
+        priv.substring(1, priv.length - 1)
+    )
     const { asPath } = useRouter()
     return (
         <div className="side-menu">
@@ -41,7 +44,9 @@ export default function SideMenu({ privilege }) {
                                 <Accordion.Header>Data Proses</Accordion.Header>
                                 <Accordion.Body>
                                     <ul>
-                                        {privilege.includes('Upload Data') && (
+                                        {validPrivilege.includes(
+                                            'Upload Data'
+                                        ) && (
                                             <li
                                                 className={
                                                     asPath === '/upload-data'
@@ -76,7 +81,9 @@ export default function SideMenu({ privilege }) {
                                                 </NextLink>
                                             </li>
                                         )}
-                                        {privilege.includes('Searching') && (
+                                        {validPrivilege.includes(
+                                            'Searching'
+                                        ) && (
                                             <li
                                                 className={
                                                     asPath ===
@@ -104,7 +111,7 @@ export default function SideMenu({ privilege }) {
                                                 </NextLink>
                                             </li>
                                         )}
-                                        {privilege.includes('Report') && (
+                                        {validPrivilege.includes('Report') && (
                                             <li
                                                 className={
                                                     asPath === '/report'

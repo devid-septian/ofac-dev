@@ -16,6 +16,9 @@ export default function Header({ toggleClass, privilege }) {
         dispatch(setUser(null))
         Router.push('/')
     }
+    const validPrivilege = privilege.map((priv) =>
+        priv.substring(1, priv.length - 1)
+    )
     return (
         <Navbar bg="primary" expand="lg">
             <Container fluid>
@@ -47,7 +50,7 @@ export default function Header({ toggleClass, privilege }) {
                         </Dropdown.Toggle>
 
                         <Dropdown.Menu align="end">
-                            {privilege.includes('Change Password') && (
+                            {validPrivilege.includes('Change Password') && (
                                 <Dropdown.Item
                                     onClick={() =>
                                         Router.push('/change-password')
@@ -56,7 +59,7 @@ export default function Header({ toggleClass, privilege }) {
                                     Change Password
                                 </Dropdown.Item>
                             )}
-                            {privilege.includes('Master User') && (
+                            {validPrivilege.includes('Master User') && (
                                 <Dropdown.Item
                                     onClick={() => Router.push('/users')}
                                 >
@@ -69,21 +72,23 @@ export default function Header({ toggleClass, privilege }) {
                             >
                                 Profile
                             </Dropdown.Item>
-                            {privilege.includes('Master Role') && (
+                            {validPrivilege.includes('Master Role') && (
                                 <Dropdown.Item
                                     onClick={() => Router.push('/roles')}
                                 >
                                     Roles
                                 </Dropdown.Item>
                             )}
-                            {privilege.includes('Master Privilege') && (
+                            {validPrivilege.includes('Master Privilege') && (
                                 <Dropdown.Item
                                     onClick={() => Router.push('/privilege')}
                                 >
                                     Privilege
                                 </Dropdown.Item>
                             )}
-                            {privilege.includes('Master System Parameter') && (
+                            {validPrivilege.includes(
+                                'Master System Parameter'
+                            ) && (
                                 <Dropdown.Item
                                     onClick={() =>
                                         Router.push('/system-parameter')

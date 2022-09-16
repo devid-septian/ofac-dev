@@ -1,5 +1,6 @@
 // Import the RTK Query methods from the React-specific entry point
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
+import { URL_API } from '../../config'
 
 // Define our single API slice object
 export const apiSlice = createApi({
@@ -7,12 +8,9 @@ export const apiSlice = createApi({
     reducerPath: 'api',
     // All of our requests will have URLs starting with '/fakeApi'
     baseQuery: fetchBaseQuery({
-        baseUrl: 'http://31.220.6.203:7789',
+        baseUrl: URL_API,
         prepareHeaders: (headers) => {
-            headers.set(
-                'Access-Control-Allow-Origin',
-                'http://31.220.6.203:7789'
-            )
+            headers.set('Access-Control-Allow-Origin', URL_API)
             return headers
         },
     }),
