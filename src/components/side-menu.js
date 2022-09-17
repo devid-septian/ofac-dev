@@ -4,9 +4,8 @@ import Accordion from 'react-bootstrap/Accordion'
 import NextLink from 'next/link'
 
 export default function SideMenu({ privilege }) {
-    const validPrivilege = privilege.map((priv) =>
-        priv.substring(1, priv.length - 1)
-    )
+    const validPrivilege =
+        privilege && privilege.map((priv) => priv.substring(1, priv.length - 1))
     const { asPath } = useRouter()
     return (
         <div className="side-menu">

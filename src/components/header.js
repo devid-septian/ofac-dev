@@ -16,9 +16,8 @@ export default function Header({ toggleClass, privilege }) {
         dispatch(setUser(null))
         Router.push('/')
     }
-    const validPrivilege = privilege.map((priv) =>
-        priv.substring(1, priv.length - 1)
-    )
+    const validPrivilege =
+        privilege && privilege.map((priv) => priv.substring(1, priv.length - 1))
     return (
         <Navbar bg="primary" expand="lg">
             <Container fluid>
