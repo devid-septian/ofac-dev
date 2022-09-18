@@ -70,12 +70,14 @@ export default function Dashboard() {
 
     // eslint-disable-next-line react-hooks/rules-of-hooks
     useEffect(() => {
-        getListDataMerchant()
-    }, [])
-
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    useEffect(() => {
-        getListDataMerchant()
+        if (
+            firstName !== '' ||
+            lastName !== '' ||
+            idNumber !== '' ||
+            dob !== ''
+        ) {
+            getListDataMerchant()
+        }
     }, [activeTab])
 
     const getListDataMerchant = async () => {

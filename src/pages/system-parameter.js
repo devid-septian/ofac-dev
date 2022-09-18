@@ -66,6 +66,7 @@ export default function Dashboard() {
         }
         const result = await updateSystemParameter(dataRequest)
         if (result.data.success) {
+            getSystemParameterList()
             setShowModal(false)
             MySwal.fire({
                 icon: 'success',
@@ -116,6 +117,7 @@ export default function Dashboard() {
                                     onChange={(e) =>
                                         setSystemNameData(e.target.value)
                                     }
+                                    disabled
                                 />
                             </Form.Group>
                         </Col>

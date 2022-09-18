@@ -65,6 +65,11 @@ export default function Dashboard() {
         const newWindow = window.open(url, '_blank', 'noopener,noreferrer')
         if (newWindow) newWindow.opener = null
     }
+    const getDetailReport = () => {
+        const url = `${URL_API}/data/getDetailReportFile/${user.User.user_token}`
+        const newWindow = window.open(url, '_blank', 'noopener,noreferrer')
+        if (newWindow) newWindow.opener = null
+    }
     return (
         <>
             <div className={`dashboard ${isActive ? 'show_menu' : null}`}>
@@ -145,6 +150,16 @@ export default function Dashboard() {
                                     </Button>
                                 </div>
                             </div>
+
+                            <Button
+                                className="float-end"
+                                variant="success"
+                                size="sm"
+                                onClick={getDetailReport}
+                            >
+                                <FileDownloadIcon />
+                                Download Detailed
+                            </Button>
                         </Card.Body>
                     </Card>
                     <Card className="mt-5">
