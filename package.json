@@ -5,7 +5,7 @@
     "scripts": {
         "dev": "next dev",
         "build": "next build",
-        "start": "next start",
+        "start": "next -p 3003 start",
         "lint": "next lint",
         "export": "next build && next export",
         "sass": "sass --watch src/styles/main.scss:src/styles/main.css"
