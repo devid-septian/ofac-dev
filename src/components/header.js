@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import Button from 'react-bootstrap/Button'
 import Container from 'react-bootstrap/Container'
 import Form from 'react-bootstrap/Form'
@@ -7,17 +7,30 @@ import Navbar from 'react-bootstrap/Navbar'
 import Dropdown from 'react-bootstrap/Dropdown'
 import { useDispatch } from 'react-redux'
 import { setUser } from '../redux/services/userSlice'
+import { useGetNotificationMutation } from '../redux/services/apiSlice'
 import Router from 'next/router'
 import NotificationsIcon from '@mui/icons-material/Notifications'
 
 export default function Header({ toggleClass, privilege }) {
     const dispatch = useDispatch()
+    const [listNotification, setListNotification] = useState([])
+    const [getNotification] = useGetNotificationMutation()
     const logoutHandler = () => {
         dispatch(setUser(null))
         Router.push('/')
     }
     const validPrivilege =
         privilege && privilege.map((priv) => priv.substring(1, priv.length - 1))
+
+    const getListNotification = async () => {
+        const listNotificationApi = await getNotification()
+        setListNotification(listNotificationApi.data.data)
+    }
+
+    useEffect(() => {
+        getListNotification()
+    }, [])
+
     return (
         <Navbar bg="primary" expand="lg">
             <Container fluid>
@@ -34,13 +47,16 @@ export default function Header({ toggleClass, privilege }) {
                         </Dropdown.Toggle>
 
                         <Dropdown.Menu align="end">
-                            <Dropdown.Item>
-                                1 minute ago User Uploaded new File
-                            </Dropdown.Item>
-                            <Dropdown.Divider />
-                            <Dropdown.Item>
-                                1 minute ago User Uploaded new File
-                            </Dropdown.Item>
+                            {listNotification.map((notification, index) => (
+                                <div key={index}>
+                                    <Dropdown.Item>
+                                        {notification.notification_message}
+                                    </Dropdown.Item>
+                                    {index !== listNotification.length - 1 && (
+                                        <Dropdown.Divider />
+                                    )}
+                                </div>
+                            ))}
                         </Dropdown.Menu>
                     </Dropdown>
                     <Dropdown>

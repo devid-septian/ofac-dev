@@ -156,6 +156,11 @@ export const apiSlice = createApi({
                 body: requestBody,
             }),
         }),
+        getNotification: builder.mutation({
+            query: () => ({
+                url: 'data/getNotification',
+            }),
+        }),
     }),
 })
 
@@ -181,4 +186,5 @@ export const {
     useGetDownloadReportMutation,
     useGetPrivilegeMutation,
     useUpdatePrivilegeMutation,
+    useGetNotificationMutation,
 } = apiSlice

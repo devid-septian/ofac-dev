@@ -78,7 +78,7 @@ export default function Dashboard() {
         const requestBody = {
             user_name: '',
             user_full_name: '',
-            role_id: 1,
+            role_id: 0,
             status: 'active',
             user_organization: '',
             user_token: user.User.user_token,
