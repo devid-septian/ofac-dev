@@ -71,7 +71,7 @@ export default function Dashboard() {
     const uploadFileHandler = (file_type) => {
         MySwal.fire({
             title: `Upload File ${file_type === 'sdn' ? 'Sdn' : 'Consolidate'}`,
-            text: 'Do you want to upload file ?',
+            text: 'Uploading file will remove last matching result detail, are you sure want to proceed?',
             icon: 'question',
             showCancelButton: true,
             confirmButtonText: 'OK',

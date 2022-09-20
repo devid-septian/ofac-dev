@@ -136,10 +136,8 @@ export const apiSlice = createApi({
             }),
         }),
         getDownloadReport: builder.mutation({
-            query: (requestBody) => ({
-                url: '/data/downloadReport',
-                method: 'POST',
-                body: requestBody,
+            query: () => ({
+                url: '/data/checkDownloadReport',
             }),
         }),
         getPrivilege: builder.mutation({
