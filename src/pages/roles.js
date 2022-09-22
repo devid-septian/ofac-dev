@@ -16,6 +16,7 @@ import {
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
 import Table from 'react-bootstrap/Table'
+import { isEmpty } from 'lodash'
 
 export default function Dashboard() {
     const [isActive, setActive] = useState(true)
@@ -29,6 +30,7 @@ export default function Dashboard() {
     const [addRole, { isLoadingAdd }] = useAddRoleMutation()
     const [updateRole, { isLoadingUpdate }] = useUpdateRoleMutation()
     const [deleteRole, { isLoadingDelete }] = useDeleteRoleMutation()
+    const [isActiveApplyButton, setActiveApplyButton] = useState(true)
     const MySwal = withReactContent(Swal)
 
     const toggleClass = () => {
@@ -129,6 +131,15 @@ export default function Dashboard() {
         getRoleList()
     }, [])
 
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    useEffect(() => {
+        if (isEmpty(roleNameData)) {
+            setActiveApplyButton(true)
+        } else {
+            setActiveApplyButton(false)
+        }
+    }, [roleNameData])
+
     if (!user) {
         Router.push('/')
         return
@@ -181,7 +192,7 @@ export default function Dashboard() {
                         </Button>
                         <Button
                             variant="primary"
-                            disabled={isLoadingAdd}
+                            disabled={isLoadingAdd || isActiveApplyButton}
                             onClick={submitHandler}
                         >
                             {isLoadingAdd || isLoadingUpdate ? (

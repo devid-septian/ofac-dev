@@ -25,7 +25,7 @@ import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
-import { noop } from 'lodash'
+import { noop, isEmpty } from 'lodash'
 import { DOTS, getPagination } from '../hooks/pagination'
 
 export default function Dashboard() {
@@ -54,9 +54,11 @@ export default function Dashboard() {
         },
         id: [],
         program: [],
+        entry: {},
     })
     const [modalShow, setModalShow] = useState(false)
     const [isActive, setActive] = useState(true)
+    const [isActiveApplyButton, setActiveApplyButton] = useState(true)
 
     const toggleClass = () => {
         setActive(!isActive)
@@ -79,6 +81,15 @@ export default function Dashboard() {
             getListDataMerchant()
         }
     }, [activeTab])
+
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    useEffect(() => {
+        if (isEmpty(firstName) || isEmpty(lastName) || isEmpty(idNumber)) {
+            setActiveApplyButton(true)
+        } else {
+            setActiveApplyButton(false)
+        }
+    }, [firstName, lastName, idNumber])
 
     const getListDataMerchant = async () => {
         let dataDob = ''
@@ -377,6 +388,7 @@ export default function Dashboard() {
                                 variant="primary2 me-2"
                                 size="sm"
                                 onClick={applyHandler}
+                                disabled={isActiveApplyButton}
                             >
                                 <CheckIcon />
                                 Apply

@@ -29,6 +29,7 @@ import {
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
 import Table from 'react-bootstrap/Table'
+import { isEmpty } from 'lodash'
 
 export default function Dashboard() {
     const [isActive, setActive] = useState(true)
@@ -48,6 +49,7 @@ export default function Dashboard() {
     const [addUser, { isLoadingAdd }] = useAddUserMutation()
     const [updateUser, { isLoadingUpdate }] = useUpdateUserMutation()
     const [deleteUser, { isLoadingDelete }] = useDeleteUserMutation()
+    const [isActiveApplyButton, setActiveApplyButton] = useState(true)
     const MySwal = withReactContent(Swal)
 
     const toggleClass = () => {
@@ -177,6 +179,28 @@ export default function Dashboard() {
         getUserList()
         getRoleList()
     }, [])
+
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    useEffect(() => {
+        if (
+            isEmpty(userNameData) ||
+            isEmpty(userFullNameData) ||
+            isEmpty(passwordData) ||
+            roleNameData === 0 ||
+            roleNameData === '0' ||
+            isEmpty(organizationData)
+        ) {
+            setActiveApplyButton(true)
+        } else {
+            setActiveApplyButton(false)
+        }
+    }, [
+        userNameData,
+        userFullNameData,
+        passwordData,
+        roleNameData,
+        organizationData,
+    ])
 
     if (!user) {
         Router.push('/')
@@ -353,7 +377,7 @@ export default function Dashboard() {
                         </Button>
                         <Button
                             variant="primary"
-                            disabled={isLoadingAdd}
+                            disabled={isLoadingAdd || isActiveApplyButton}
                             onClick={submitHandler}
                         >
                             {isLoadingAdd || isLoadingUpdate ? (

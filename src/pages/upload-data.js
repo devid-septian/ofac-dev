@@ -164,6 +164,7 @@ export default function Dashboard() {
                                         controlId="dataForm.ControlInputAccount"
                                     >
                                         <Form.Control
+                                            accept="text/xml"
                                             type="file"
                                             ref={sdnRef}
                                             onChange={sdnFileHandler}
@@ -189,6 +190,7 @@ export default function Dashboard() {
                                         controlId="dataForm.ControlInputAccount"
                                     >
                                         <Form.Control
+                                            accept="text/xml"
                                             type="file"
                                             ref={consolidateRef}
                                             onChange={consolidateFileHandler}
