@@ -328,8 +328,8 @@ const MyVerticallyCenteredModal = (props) => {
                         <Accordion.Item eventKey="7">
                             <Accordion.Header>ID Number Info</Accordion.Header>
                             <Accordion.Body>
-                                {merchantdetail.dob &&
-                                    merchantdetail.dob.map((data, index) => (
+                                {merchantdetail.id &&
+                                    merchantdetail.id.map((data, index) => (
                                         <>
                                             <Row key={index}>
                                                 <Col xs={6}>
