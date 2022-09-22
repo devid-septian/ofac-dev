@@ -20,10 +20,6 @@ const MyVerticallyCenteredModal = (props) => {
                     <Row>
                         <Col xs={6}>
                             <div className="detail-box">
-                                <label>ID Number:</label>
-                                <p>{merchantdetail.entry.id_number || '-'}</p>
-                            </div>
-                            <div className="detail-box">
                                 <label>First Name:</label>
                                 <p>{merchantdetail.entry.first_name || '-'}</p>
                             </div>
@@ -32,10 +28,6 @@ const MyVerticallyCenteredModal = (props) => {
                             <div className="detail-box">
                                 <label>Last Name:</label>
                                 <p>{merchantdetail.entry.last_name || '-'}</p>
-                            </div>
-                            <div className="detail-box">
-                                <label>Date of Birth:</label>
-                                <p>{merchantdetail.entry.dob || '-'}</p>
                             </div>
                         </Col>
                     </Row>
