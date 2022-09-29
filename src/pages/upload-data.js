@@ -58,15 +58,37 @@ export default function Dashboard() {
     }
     const sdnFileHandler = async (e) => {
         const file = e.target.files[0]
-        setSdnFileName(file.name)
-        const result = await getBase64(file)
-        setSdnFile(result.split(',')[1])
+        if (file.type === 'text/xml') {
+            setSdnFileName(file.name)
+            const result = await getBase64(file)
+            setSdnFile(result.split(',')[1])
+        } else {
+            sdnRef.current.value = ''
+            MySwal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'Only Accept Xml File',
+                showConfirmButton: false,
+                timer: 1500,
+            })
+        }
     }
     const consolidateFileHandler = async (e) => {
         const file = e.target.files[0]
-        setConsolidateFileName(file.name)
-        const result = await getBase64(file)
-        setConsolidateFile(result.split(',')[1])
+        if (file.type === 'text/xml') {
+            setConsolidateFileName(file.name)
+            const result = await getBase64(file)
+            setConsolidateFile(result.split(',')[1])
+        } else {
+            sdnRef.current.value = ''
+            MySwal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'Only Accept Xml File',
+                showConfirmButton: false,
+                timer: 1500,
+            })
+        }
     }
     const uploadFileHandler = (file_type) => {
         MySwal.fire({
