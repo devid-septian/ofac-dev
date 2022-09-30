@@ -58,12 +58,14 @@ export default function Dashboard() {
     }
     const sdnFileHandler = async (e) => {
         const file = e.target.files[0]
-        if (file.type === 'text/xml') {
+        if (file && file.type === 'text/xml') {
             setSdnFileName(file.name)
             const result = await getBase64(file)
             setSdnFile(result.split(',')[1])
         } else {
             sdnRef.current.value = ''
+            setSdnFileName('No file chosen')
+            setSdnFile(null)
             MySwal.fire({
                 icon: 'error',
                 title: 'Error',
@@ -75,12 +77,14 @@ export default function Dashboard() {
     }
     const consolidateFileHandler = async (e) => {
         const file = e.target.files[0]
-        if (file.type === 'text/xml') {
+        if (file && file.type === 'text/xml') {
             setConsolidateFileName(file.name)
             const result = await getBase64(file)
             setConsolidateFile(result.split(',')[1])
         } else {
-            sdnRef.current.value = ''
+            consolidateRef.current.value = ''
+            setConsolidateFileName('No file chosen')
+            setConsolidateFile(null)
             MySwal.fire({
                 icon: 'error',
                 title: 'Error',
